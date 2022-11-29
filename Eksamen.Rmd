@@ -1,0 +1,71 @@
+---
+title: "Statistical learning og programmering"
+author: "Af Kenneth Gottfredsen, Eva Imad og Sanne Sørensen"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: yes
+    df_print: paged
+    number_sections: yes
+  word_document:
+    toc: yes
+  html_document:
+    toc: yes
+    df_print: paged
+subtitle: '1. Semesterprojekt. Antal ord:'
+header-includes:
+- \renewcommand{\contentsname}{Indholdsfortegnelse}  
+- \usepackage{fancyhdr}
+# - \usepackage[danish]{babel} # Dansksprog. 
+# - \pagestyle{fancy}
+# - \fancyhead[CO,CE]{Bjarne Taulo Sørensen}
+# - \fancyfoot[CO,CE]{Do not copy or distribute this document without author's consent}
+# - \usepackage{lastpage}
+# - \fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+latex_engine: xelatex
+fontsize: 12pt
+geometry: margin=1in
+linestretch: 1.5
+documentclass: report
+papersize: a4
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tinytex.verbose = TRUE)
+```
+
+## R Markdown
+
+## Github
+
+1. Først opretter man et repository inde på github.
+2. Dernæst smider man alle de filer man gerne vil arbejde med ind i folderen. 
+3. Gemmer ens gitlink.
+
+## Gitkraken 
+
+Der kommer en ny tekst igen. 
+
+1. Først opretter man en clone. 
+2. Dernæst bruger man sit gitlink til at danne en sti.
+
+Push sender pakken fra mig afsted. Pull modtager pakken fra postmanden. Og det var det!
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
