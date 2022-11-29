@@ -14,20 +14,15 @@ output:
     df_print: paged
 subtitle: '1. Semesterprojekt. Antal ord:'
 header-includes:
-- \renewcommand{\contentsname}{Indholdsfortegnelse}  
+#- \renewcommand{\contentsname}{Indholdsfortegnelse}  
 - \usepackage{fancyhdr}
-# - \usepackage[danish]{babel} # Dansksprog. 
-# - \pagestyle{fancy}
-# - \fancyhead[CO,CE]{Bjarne Taulo Sørensen}
-# - \fancyfoot[CO,CE]{Do not copy or distribute this document without author's consent}
-# - \usepackage{lastpage}
-# - \fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
-latex_engine: xelatex
-fontsize: 12pt
-geometry: margin=1in
-linestretch: 1.5
-documentclass: report
-papersize: a4
+- \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
+latex_engine: xelatex # Xelatex er den gamle engine til TNR.
+fontsize: 12pt # Tekststørrelse. 
+geometry: margin=1in # Justerer margen.
+linestretch: 1.5 # 1.5 linjeafstand. 
+documentclass: report # Dokumenttypen.
+papersize: a4 # a4 side. 
 ---
 
 ```{r setup, include=TRUE}
@@ -69,3 +64,9 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Import
+
+## Tidy
+
+
