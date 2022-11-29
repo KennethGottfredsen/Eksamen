@@ -45,7 +45,7 @@ options(tinytex.verbose = TRUE)
 
 ## Gitkraken 
 
-Der kommer en ny tekst igen. 
+Vi prøver igen.  
 
 1. Først opretter man en clone. 
 2. Dernæst bruger man sit gitlink til at danne en sti.
