@@ -194,7 +194,7 @@ Det næste skridt er at transformere de forskellige variable:
 ```{r, Chunk 3 - Transformering, include=TRUE, eval= TRUE, warning=FALSE}
 data1 <- read_excel("data/stud_exam_data.xlsx") %>% 
 mutate(date = ymd(date), måned = factor(month(date)),
-kamjunk = factor(kammerjunkere), forvent_lager = factor(forventet_l_lager)) %>% mutate(dag = as.factor(wday(date, week_start = getOption("lubridate.week.start", 1)))) %>% mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in% ymd("2022-04-14", "2022-04-18", "2022-05-26", "2022-06-06"))) %>% mutate(weekend = factor(weekend_1)) %>% mutate(data1, kamjunk = fct_recode(kammerjunkere, "nej" = "0", "ja" = "1")) %>% mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1", "mellem" = "2", "høj" = "3")) %>% mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5", "juni" = "6", "juli" = "7", "august" = "8")) %>% mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2", "onsdag" = "3", "torsdag" = "4", "fredag" = "5", "lørdag" = "6", "søndag" = "7")) %>% dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager, weekend_helligdag = weekend)
+kamjunk = factor(kammerjunkere), forvent_lager = factor(forventet_l_lager)) %>% mutate(dag = as.factor(wday(date, week_start = getOption("lubridate.week.start", 1)))) %>% mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in% ymd("2022-04-14", "2022-04-18", "2022-05-26", "2022-06-06"))) %>% mutate(weekend = factor(weekend_1)) %>% mutate(data1, kamjunk = fct_recode(kammerjunkere, "ja" = "0", "nej" = "1")) %>% mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1", "mellem" = "2", "høj" = "3")) %>% mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5", "juni" = "6", "juli" = "7", "august" = "8")) %>% mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2", "onsdag" = "3", "torsdag" = "4", "fredag" = "5", "lørdag" = "6", "søndag" = "7")) %>% dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager, weekend_helligdag = weekend)
 data1
 str(data1) # Undersøger faktorernes niveau.
 glimpse(data1)
@@ -289,7 +289,7 @@ xlim(200, 900)
 ggplot(data3, aes(x = efterspørgsel, fill = forvent_lager)) +
   geom_bar()
 
-ggplot(data3, aes(x = efterspørgsel, color = forvent_lager, fill = forvent_lager)) +
+ggplot(data3, aes(x = date, color = efterspørgsel, fill = forvent_lager)) +
   geom_density(alpha = 0.5)
 
 
@@ -344,6 +344,20 @@ plot.subtitle = element_text(hjust = 0.5, size = 14),
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
 
 
+ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel)) +
+stat_boxplot(geom = 'errorbar') +
+geom_boxplot() + 
+labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
+subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
+caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (L).",
+x = "Butikkens forventede lagerbeholdning") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
+
+
 # Basic scatter plot.
 ggplot(data3, aes(x = temp_mean_past1h, y = efterspørgsel)) + 
 geom_point() +
@@ -368,6 +382,54 @@ chisq.test(forvent_lager, efterspørgsel)
 
 
 I dette afsnit vil vi gå i gang med analysen.
+
+```{r}
+
+# LOOCV metoden er mindre biased end validation set metoden; hver gang vi fit’er en model, så er det på baggrund af hele datasættet med undtagelse af én observation, 
+
+glimpse(data3)
+# Vi finder den model med den mindste MSE. 
+# n-fold=LOOVC
+levels(data3$kamjunk)
+str(data3$kamjunk)
+glimpse(data3)
+attach(data3)
+lm.fit = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + dag + temp_dry + temp_mean_past1h + humidity_past1h + temp_max_past1h)
+summary(lm.fit)
+
+
+y efterspørgsel x temp_mean_past1h^4v^22
+
+x <- data3$temp_mean_past1h$
+y <- data3$efterspørgsel
+
+set.seed(1)
+cv.error.4 <- rep(0, 4)
+for (i in 1:4) {
+  glm.fit <- glm(efterspørgsel ~ poly(temp_mean_past1h + humidity + humidity, ), data = data3)
+
+cv.error.4[i] <- cv.glm(data3, glm.fit, K = 10)$delta[1]
+}
+cv.error.4
+
+
+x <- data3$temp_mean_past1h
+y <- data3$efterspørgsel
+plot(x, y)
+data <- data.frame(y, x)
+
+set.seed(1)
+cv.error <- rep(0, 4)
+for (i in 1:4) {
+  glm.fit <- glm(y~poly(x , i), data = data)
+  cv.error[i] <- cv.glm(data , glm.fit)$delta [1]
+}
+cv.error
+
+summary(glm.fit)
+
+```
+
 
 \newpage
 
