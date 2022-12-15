@@ -39,16 +39,20 @@ abstract: "Her kan I skrive et abstract, som ikke bør fylde mere end en halv si
 pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder","Lahman", "maps",
 "lubridate", "pryr", "hms", "hexbin", "feather", "htmlwidgets",
 "broom", "pander", "modelr", "XML", "httr", "jsonlite", "lubridate", "microbenchmark", "splines", "ISLR2", "MASS", "testthat", "leaps", "caret", "RSQLite", "class", "babynames", "nasaweather", "fueleconomy", "viridis", "readxl", "timeDate", "tinytex","ggbeeswarm", "palmerpenguins", "hms")
-
 ```
 Indlæser datasæt: Halløjsa. 
 ```{r}
 data1 <- read_excel("data/stud_exam_data.xlsx") 
 ```
 
-# Intro 
 
-Hallo! 
+
+
+```{r}
+
+```
+
+# Intro 
 
 Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
