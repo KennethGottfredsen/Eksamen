@@ -175,7 +175,7 @@ pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "splines", "ISLR2", "MASS", "testthat", "leaps", "caret",
                "RSQLite", "class", "babynames", "nasaweather",
                "fueleconomy", "viridis", "readxl", "timeDate", "tinytex",
-               "ggbeeswarm", "palmerpenguins", "hms")
+               "ggbeeswarm", "palmerpenguins", "hms", "RcolorBrewer")
 ```
 
 ymd \newpage
@@ -273,7 +273,7 @@ filter(efterspørgsel < 47 | efterspørgsel > 129)
 data3 # Observation 1 med 47 og 129 er væk. Der er i alt 150. 
 
 ggplot(data = data3) +
-geom_histogram(mapping = aes(x = efterspørgsel), colour = "black", fill= "white", binwidth = 60) + 
+geom_histogram(mapping = aes(x = efterspørgsel), color = "black", fill = "grey", binwidth = 60) + 
 labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
 subtitle = "Undersøger om efterspørgslen er normaltfordelt",
 y = "Samlet antal observationer",
@@ -283,7 +283,7 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
-xlim(200, 900) 
+xlim(150, 950) 
 
 
 ggplot(data3, aes(x = efterspørgsel, fill = forvent_lager)) +
@@ -295,7 +295,7 @@ ggplot(data3, aes(x = date, color = efterspørgsel, fill = forvent_lager)) +
 
 
 ggplot(data3, aes(x = efterspørgsel)) + 
-geom_histogram(aes(y =..density..), colour = "black", fill= "white", binwidth = 60) +
+geom_histogram(aes(y =..density..), colour = "black", fill = "gray", binwidth = 60) +
 geom_density(alpha=.3, fill="#FF6666", adjust=1.5) + # Standardiseret så arealet = 1 
 labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
 subtitle = "Undersøger om efterspørgslen er normaltfordelt",
@@ -305,57 +305,55 @@ caption = "Kilde: Thise Mejeri 2022") +
 ggeasy::easy_center_title() + # Centrerer titlen. 
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10)) + 
-xlim(100, 1000) + ylim(0, 0.004)
+plot.caption = element_text(hjust = 1, face = "italic", size = 10)) + xlim(150, 1000) + ylim(0, 0.005)
 
 
 
-ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel)) +
+ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill = forvent_lager)) +
 stat_boxplot(geom = 'errorbar') + # whiskers. 
 geom_boxplot() + 
 labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
 subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
 caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-y = "Butikkernes efterspørgsel på koldskål (L).",
+y = "Butikkernes efterspørgsel på koldskål (ltr)",
 x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
-geom_beeswarm(dodge.width=1,cex=3) + # Justerer boksbredden.
-geom_quasirandom() # Undgår overplotting
+geom_beeswarm(dodge.width=3, cex=0.5, color = "black") + # Justerer boksbredden.
 ggeasy::easy_center_title() + # Centrerer titlen. 
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
 
 glimpse(data3)
 
 # Undersøger spredningen af data
-ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel)) +
+ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill = kamjunk)) +
 stat_boxplot(geom = 'errorbar') +
 geom_boxplot() + 
 labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
 subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
 caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
 y = "Butikkernes efterspørgsel på koldskål (L).",
-x = "Butikkens forventede lagerbeholdning") +
-geom_quasirandom() + # Undgår overplotting.
-geom_beeswarm(dodge.width=3,cex=5) + # Justerer boksbredden.
+x = "Har butikken kammerjunkere på lager") +
 ggeasy::easy_center_title() + # Centrerer titlen. 
+geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
+plot.caption = element_text(hjust = 1, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
 
 
-ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel)) +
+ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel, fill = måned)) +
 stat_boxplot(geom = 'errorbar') +
 geom_boxplot() + 
 labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
 subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
 caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
 y = "Butikkernes efterspørgsel på koldskål (L).",
-x = "Butikkens forventede lagerbeholdning") +
+x = "Måned") +
 ggeasy::easy_center_title() + # Centrerer titlen. 
+geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
 
 
 # Basic scatter plot.
@@ -371,8 +369,11 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
-xlim(5, 30.70) + 
-ylim(220, 850)
+xlim(5, 30.70) + ylim(220, 850) +
+  scale_fill_brewer(palette = "Pastel2")
+
+
+
 glimpse(data3)
 
 attach(data3)
