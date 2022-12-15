@@ -45,7 +45,7 @@ Indlæser datasæt: Halløjsa.
 data1 <- read_excel("data/stud_exam_data.xlsx") 
 ```
 
-
+ov det kan jeg godt se 
 fkdglkædfglædfg æld,gdfglædf dfælg,dfg 
 
 ```{r}
