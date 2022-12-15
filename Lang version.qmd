@@ -46,7 +46,7 @@ data1 <- read_excel("data/stud_exam_data.xlsx")
 ```
 
 
-
+fkdglkædfglædfg æld,gdfglædf dfælg,dfg 
 
 ```{r}
 dsfsdfdsfsdffsdfsdf
