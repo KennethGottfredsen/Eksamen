@@ -307,7 +307,7 @@ theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10)) + xlim(150, 1000) + ylim(0, 0.005)
 
-
+glimpse(data3)
 
 ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill = forvent_lager)) +
 stat_boxplot(geom = 'errorbar') + # whiskers. 
@@ -317,10 +317,10 @@ subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og
 caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
 y = "Butikkernes efterspørgsel på koldskål (ltr)",
 x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
-geom_beeswarm(dodge.width=3, cex=0.5, color = "black") + # Justerer boksbredden.
+geom_beeswarm(dodge.width=3, cex =1, color = "black") + # Justerer boksbredden.
 ggeasy::easy_center_title() + # Centrerer titlen. 
-theme( plot.title = element_text(hjust = 0.5, size = 16),
-plot.subtitle = element_text(hjust = 0.5, size = 14), 
+theme( plot.title = element_text(hjust = 0.5, size = 14),
+plot.subtitle = element_text(hjust = 0.5, size = 12), 
 plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
 
 glimpse(data3)
@@ -338,14 +338,14 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
 
 
 ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel, fill = måned)) +
 stat_boxplot(geom = 'errorbar') +
 geom_boxplot() + 
-labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
-subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
+labs(title = "Sammenhængen mellem måned og efterspørgsel af koldskål",
+subtitle = "Boxplox der viser variationen ift. den specifikke periode og koldskål",
 caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
 y = "Butikkernes efterspørgsel på koldskål (L).",
 x = "Måned") +
