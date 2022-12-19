@@ -285,15 +285,6 @@ plot.subtitle = element_text(hjust = 0.5, size = 14),
 plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
 xlim(150, 950) 
 
-
-ggplot(data3, aes(x = efterspørgsel, fill = forvent_lager)) +
-  geom_bar()
-
-ggplot(data3, aes(x = date, color = efterspørgsel, fill = forvent_lager)) +
-  geom_density(alpha = 0.5)
-
-
-
 ggplot(data3, aes(x = efterspørgsel)) + 
 geom_histogram(aes(y =..density..), colour = "black", fill = "gray", binwidth = 60) +
 geom_density(alpha=.3, fill="#FF6666", adjust=1.5) + # Standardiseret så arealet = 1 
@@ -411,28 +402,6 @@ lm.fit4 = lm(efterspørgsel ~ temp_max_past1h + temp_max_past1h^5) # ekstrem mod
 summary(lm.fit4)
 
 
-glm.fit <- glm(efterspørgsel ~ poly(temp_max_past1h + temp_max_past1h^5))
-summary(glm.fit)
-
-
-
-x <- data3$temp_max_past1h$
-y <- data3$efterspørgsel
-
-set.seed(1)
-cv.error.4 <- rep(0, 4)
-for (i in 1:4) {
-  glm.fit <- glm(efterspørgsel ~ poly(temp_mean_past1h + humidity + humidity), data = data3)
-
-cv.error.4[i] <- cv.glm(data3, glm.fit, K = 10)$delta[1]
-}
-cv.error.4
-
-
-
-
-
-
 x <- data3$temp_max_past1h
 y <- data3$efterspørgsel
 plot(x, y)
@@ -452,14 +421,6 @@ ggplot(data3, mapping = aes(x=x, y=y)) +
   geom_smooth(method="glm", formula = y ~ poly(x, 1, raw=TRUE), se=FALSE, colour="blue") +
   geom_smooth(method="glm", formula = y ~ poly(x, 2, raw=TRUE), se=FALSE, colour="green") +
   geom_smooth(method="glm", formula = y ~ poly(x, 22, raw=TRUE), se=FALSE, colour="red") +
-geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3)
-  
-
-ggplot(data3, mapping = aes(x=x, y=y)) + 
-  geom_point(alpha=1/3) +
-  geom_smooth(method="lm", formula = y ~ poly(x, 1, raw=TRUE), se=FALSE, colour="blue") +
-  geom_smooth(method="lm", formula = y ~ poly(x, 2, raw=TRUE), se=FALSE, colour="red") +
-  geom_smooth(method="lm", formula = y ~ poly(x, 22, raw=TRUE), se=FALSE, colour="green") +
 geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3)
 ```
 
