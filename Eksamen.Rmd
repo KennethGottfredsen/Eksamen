@@ -316,7 +316,7 @@ plot(data3)
 cor(weekend_helligdag, efterspørgsel)
 
 
-cor_matrice <- data3 |>  dplyr::select(-(måned:weekend_helligdag))
+cor_matrice <- data3 |>  dplyr::select(efterspørgsel, date, temp_min_past1h, temp_dry, temp_max_past1h, temp_mean_past1h, temp1, temp2, temp3)
 glimpse(cor_matrice)
 plot(cor_matrice)
 
