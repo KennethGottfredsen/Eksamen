@@ -313,14 +313,11 @@ I dette afsnit vil vi gå i gang med analysen.
 
 
 cor_matrice <- data3 |>  dplyr::select(efterspørgsel, date, temp_min_past1h, temp_dry, temp_max_past1h, temp_mean_past1h, temp1, temp2, temp3)
-glimpse(cor_matrice)
 plot(cor_matrice)
 
 # Vi finder den model med den mindste MSE. 
 # n-fold=LOOVC
-levels(data3$dag)
-str(data3$dag)
-glimpse(data3)
+
 attach(data3)
 lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + dag + temp_dry + temp_mean_past1h + humidity_past1h + temp_max_past1h)
 summary(lm.fit1)
