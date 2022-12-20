@@ -1,0 +1,10 @@
+\babel@toc {danish}{}\relax 
+\contentsline {section}{Import}{2}{section*.2}%
+\contentsline {section}{Tidy}{19}{section*.3}%
+\contentsline {section}{Transformer}{20}{section*.4}%
+\contentsline {section}{Visualiser}{21}{section*.5}%
+\contentsline {section}{Model}{22}{section*.6}%
+\contentsline {section}{Kommunikér/analyse}{23}{section*.7}%
+\contentsline {section}{Sessioninformation}{23}{section*.8}%
+\contentsline {section}{Litteratur}{23}{section*.9}%
+\contentsline {section}{Bilag}{23}{section*.10}%
