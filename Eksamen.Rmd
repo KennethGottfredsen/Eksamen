@@ -93,7 +93,7 @@ pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "RSQLite", "class", "babynames", "nasaweather",
                "fueleconomy", "viridis", "readxl", "timeDate", "tinytex",
                "ggbeeswarm", "palmerpenguins", "hms", "RColorBrewer", "boot",
-               "openxlsx", "writexl", "pacman")
+               "openxlsx", "writexl", "pacman", "corrplot")
 ```
 
 \newpage
@@ -230,7 +230,6 @@ xlim(150, 950)
 
 
 
-
 ```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE, eval= TRUE}
 ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill = forvent_lager)) +
 stat_boxplot(geom = 'errorbar') + # whiskers. 
@@ -301,7 +300,6 @@ plot.subtitle = element_text(hjust = 0.5, size = 14),
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
 xlim(5, 30.70) + ylim(220, 850) +
   scale_fill_brewer(palette = "Pastel2")
-
 ```
 
 
@@ -309,32 +307,47 @@ I dette afsnit vil vi gå i gang med analysen.
 
 ```{r, Chunk 12 - Statistisk analyse, include=TRUE, eval= TRUE}
 
-# LOOCV metoden er mindre biased end validation set metoden; hver gang vi fit’er en model, så er det på baggrund af hele datasættet med undtagelse af én observation, 
+ 
+
+# LOOCV metoden er mindre biased end validation set metoden; hver gang vi fit’er en model, så er det på baggrund af hele datasættet med undtagelse af én observation,
+
+ 
 
 
 cor_matrice <- data3 |>  dplyr::select(efterspørgsel, date, temp_min_past1h, temp_dry, temp_max_past1h, temp_mean_past1h, temp1, temp2, temp3)
 plot(cor_matrice)
 
+ 
+
 # Vi finder den model med den mindste MSE. 
 # n-fold=LOOVC
+
+ 
 
 attach(data3)
 lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + dag + temp_dry + temp_mean_past1h + humidity_past1h + temp_max_past1h)
 summary(lm.fit1)
 
+ 
+
 lm.fit2 = lm(efterspørgsel ~ 1) # simpel model
 summary(lm.fit2)
+
+ 
 
 lm.fit3 = lm(efterspørgsel ~ temp_max_past1h^2) # melllem model. 
 summary(lm.fit3)
 
+ 
+
 lm.fit4 = lm(efterspørgsel ~ temp_max_past1h + temp_max_past1h^5) # ekstrem model 
 summary(lm.fit4)
+
+ 
 
 
 x <- data3$temp_max_past1h
 y <- data3$efterspørgsel
-plot(x, y)
 data <- data.frame(y, x)
 data
 set.seed(1)
@@ -345,14 +358,27 @@ for (i in 1:5) {
 }
 cv.error
 
+ 
+
 
 ggplot(data3, mapping = aes(x=x, y=y)) + 
   geom_point(alpha=1/3) +
   geom_smooth(method="glm", formula = y ~ poly(x, 1, raw=TRUE), se=FALSE, colour="blue") +
-  geom_smooth(method="glm", formula = y ~ poly(x, 2, raw=TRUE), se=FALSE, colour="green") +
+  geom_smooth(method="glm", formula = y ~ poly(x, 3, raw=TRUE), se=FALSE, colour="green") +
   geom_smooth(method="glm", formula = y ~ poly(x, 22, raw=TRUE), se=FALSE, colour="red") +
-geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3)
+geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3) + 
+  labs(title = "Sammenligning af tre regressionsmodeller",
+caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (Liter)",
+x = "Maks temperatur pr.time (Celcius)") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
+xlim(5, 30.70) + ylim(220, 850) +
+  scale_fill_brewer(palette = "Pastel2")
 ```
+
 
 
 \newpage
