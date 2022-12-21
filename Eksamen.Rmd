@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ---
 title: "Statistical learning og programmering"
 author: "Af Kenneth Gottfredsen, Eva Rauff og Sanne Sørensen"
@@ -513,3 +514,423 @@ SI <- sessionInfo(package = NULL) # Udskriver en liste om denne R session.
 ## Litteratur
 
 ## Bilag
+=======
+---
+title: "Statistical learning og programmering"
+author: "Af Kenneth Gottfredsen, Eva Imad og Sanne Sørensen"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: 
+    toc: yes
+    df_print: paged
+  word_document:
+    toc: yes
+  html_document:
+    toc: yes
+    df_print: paged
+subtitle: '1. Semesterprojekt. Antal ord:'
+header-includes:
+- \usepackage{fancyhdr} # Pakke til at justere sidehoved og sidefod.
+- \usepackage{lastpage} # Sidetal i højre side af bundmargen.
+- \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
+latex_engine: xelatex # Xelatex er den gamle engine til TNR.
+mainfont: Times New Roman # Times New Roman skrift. 
+fontsize: 12pt # Tekststørrelse. 
+geometry: margin=1in # Justerer margen.
+linestretch: 1.5 # 1.5 linjeafstand. 
+documentclass: report # Dokumenttypen.
+papersize: a4 # a4 side. 
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+<!--- Undgår at koden stikker ud over margen --->
+
+\emergencystretch 3em
+
+
+<!--- Definerer sidehoved og sidefod --->
+
+```{=tex}
+\fancypagestyle{plain}{%
+\renewcommand{\headrulewidth}{0pt}%
+\fancyhf{}%
+\fancyfoot[R]{\footnotesize Side \thepage\,af\,\pageref*{LastPage}}
+\setlength\footskip{12.75pt}
+}
+```
+<!--- Justerer sidetypen til plain --->
+
+```{=tex}
+\pagestyle{plain}
+\pagestyle{fancy}
+\thispagestyle{empty}
+```
+<!--- Sidetal starter fra nul, istedet for 1 --->
+
+\setcounter{page}{0}
+
+<!--- Laver en ny side efter indholdsfortegnelsen --->
+
+
+\newpage
+
+```{r, Setup, include=FALSE, eval=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tinytex.verbose = TRUE)
+
+knitr::knit_engines$set(upper = function(options) {
+code <- paste(options$code, collapse = "\n")
+if (options$eval) 
+toupper(code) else code
+})
+```
+
+The CRoss Industry Standard Process for Data Mining (CRISP-DM) is a process model that serves as the base for a data science process.
+It has six sequential phases:
+
+-   Business understanding -- What does the business need?
+-   Data understanding -- What data do we have / need? Is it clean?
+-   Data preparation -- How do we organize the data for modeling?
+-   Modeling -- What modeling techniques should we apply?
+-   Evaluation -- Which model best meets the business objectives?
+-   Deployment -- How do stakeholders access the results?
+
+
+I første omgang indlæses `pacman::load`:
+
+```{r, Chunk 1, include=TRUE, eval= TRUE}
+# Inden vi går i gang bruger vi pacman() til at installere og indhente relevante pakker på samme tid. 
+pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
+               "Lahman", "maps", "lubridate", "pryr", "hms", "hexbin",
+               "feather", "htmlwidgets", "broom", "pander", "modelr",
+               "XML", "httr", "jsonlite", "lubridate", "microbenchmark",
+               "splines", "ISLR2", "MASS", "testthat", "leaps", "caret",
+               "RSQLite", "class", "babynames", "nasaweather",
+               "fueleconomy", "viridis", "readxl", "timeDate", "tinytex",
+               "ggbeeswarm", "palmerpenguins", "hms", "RColorBrewer", "boot",
+               "openxlsx", "writexl", "pacman", "corrplot")
+```
+
+\newpage
+
+## Import
+
+I første omgang vil vi importere det datasæt vi har fået udleveret til eksamen:
+
+```{r, Chunk 2, include=TRUE, eval= TRUE}
+# Indlæser datasæt og gemmer det nye datasæt i et objekt. 
+data1 <- read_excel("data/stud_exam_data.xlsx")
+# Dernæst undersøges strukturen i datasættet.
+str(data1)
+```
+
+Nu har vi fået indlæst datasættet.
+Det næste skridt er at transformere de forskellige variable:
+
+```{r, Chunk 3 - Transformering, include=TRUE, eval= TRUE}
+# I denne kode vil vi rekode og transformere de udvalgte variable så de stemmer overens med eksamensbesvarelsen. Hele kodestumpen vil blive kædet sammen med 'pipe' funktionen' fra dplyr pakken. Omkodningerne bliver til sidst gemt i en ny dataframe som vi kalder data1.
+
+# 1 Vi bruger mutate() til at lave en ny kolonne ud fra data 1. Først laver vi en date variabel, som vi koder til et date objekt med ymd() funktionen fra lubridate pakken.
+
+# 2 I den næste del anvendes mutate() til, at lave en kolonne der hedder dag, som bliver omkodet til en faktor. Dernæst koder vi date til et objekt med ymd() funktionen fra lubridate pakken. "lubridate.week.start", 1. 1 referer til mandag som ugestart istedet for søndag som er standardindstillingerne i R. 
+
+# 3 Her bruger vi igen mutate() til at danne en ny weekend-variabel der hedder weekend_1. I denne sammenhæng undersøger vi om fredag, lørdag, søndag og fire helligdage er 1, ellers er de andre værdier 0. Dette kaldes for en dummyvariabel. 
+
+# 4 Måned, dag, kamjunk, forvent_lager og weekend_1 er alle kategoriske faktorer. For at gøre det nemmere at forstå hvad de forskellige værdier udtrykker, navngiver vi disse med fct_recode funktionen.
+
+data1 <- read_excel("data/stud_exam_data.xlsx") %>% 
+mutate(date = ymd(date), måned = factor(month(date)),
+kamjunk = factor(kammerjunkere), forvent_lager = factor(forventet_l_lager)) %>% mutate(dag = as.factor(wday(date, week_start = getOption("lubridate.week.start", 1)))) %>% mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in% ymd("2022-04-14", "2022-04-18", "2022-05-26", "2022-06-06"))) %>% mutate(weekend = factor(weekend_1)) %>% mutate(data1, kamjunk = fct_recode(kammerjunkere, "ja" = "0", "nej" = "1")) %>% mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1", "mellem" = "2", "høj" = "3")) %>% mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5", "juni" = "6", "juli" = "7", "august" = "8")) %>% mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2", "onsdag" = "3", "torsdag" = "4", "fredag" = "5", "lørdag" = "6", "søndag" = "7")) %>% dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager, weekend_helligdag = weekend)
+glimpse(data1)
+```
+
+```{r, Chunk 4 - Vejrdata fra DMI, include=FALSE, eval= TRUE}
+# 1 I denne kodechunk vil vi lave en HTTP get anmodning til en API fra DMI. Vi skal bruge adgangen til at få de relevante vejr-variable som vi senere skal bruge i vores analyse. Api'en leverer til slut et objekt i JSON format som bliver transformeret om til en dataframe i stedet for en liste.  
+
+# 2 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
+
+# 3 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
+
+Base_url <- "https://dmigw.govcloud.dk/v2/"	 
+Info_url <- "metObs/collections/observation/items?"
+Req_url <-  "stationId=06186&datetime=2022-04-01T12%3A00%3A00Z%2F2022-08-30T12%3A00%3A00Z&api-key=1fda8cc2-25bf-45e3-9f43-702fb9ccfdf3&limit=80182" 
+# full_url er en sammenkædning af base_url, info_url og reg_url. 
+Full_url <- base::paste0(Base_url, Info_url, Req_url)
+# Anmoder om at få adgang til apién vha. httr pakken. 
+Api_call <- httr::GET(Full_url) 
+# Undersøger status fra apién. 200 indikerer at der ikke er en fejl. 
+Api_call$status_code 
+# Undersøger hvilket format apikaldet er. Her er det json format. 
+http_type(Api_call) 
+Api_call$status_code
+# Undersøger rådata. 
+Api_call$content
+# Omdanner rådata til en karakter streng. 
+api_char <- base::rawToChar(Api_call$content) 
+# Konverterer karakterstrengen til et json objekt. 
+api_JSON <- jsonlite::fromJSON(api_char, flatten = TRUE)
+# laver en variabel som bliver kædet sammen til et json objekt.
+list_dmi <- api_JSON
+# Laver et nyt objekt som hedder data2 ud fra list_dmi. Denne liste bliver konverteret til en dataframe, så vi kan arbejde videre med vores data.
+data2 <- as.data.frame(do.call(cbind, list_dmi))
+# Vi printer et referat af vores nye dataframe som hedder data2 istedet for data1 som vi indhentede i den forrige kodechunk. 
+glimpse(data2)
+```
+
+
+```{r, Chunk 5 - Tidy af vejrdata fra DMI, include=TRUE, eval= TRUE}
+# I denne kodechunk vil vi transformere den data vi har hentet fra vores apikald til nogle mere brugbare data. 
+
+# 2 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
+
+
+data2 <- as.data.frame(do.call(cbind, list_dmi))
+data2 <- dplyr::select(data2, features.properties.observed, features.properties.value, features.properties.parameterId) %>% 
+rename(værdi = features.properties.value, parameter = features.properties.parameterId,
+målingstidspunkt = features.properties.observed) %>%
+pivot_wider(names_from = parameter, values_from = værdi) %>% 
+mutate(målingstidspunkt = as_datetime(målingstidspunkt)) %>%
+separate(målingstidspunkt, into = c('date', 'time'), sep = " ") %>% 
+filter(str_sub(time, 1, 4) == "12:0") %>% 
+mutate(date = as_date(date)) %>%
+mutate(time = as.hms(time)) %>% 
+dplyr::select(-(temp_max_past12h:temp_min_past12h))  
+glimpse(data2)
+```
+
+```{r, Chunk 6 - Merging af de to datasæt, include=TRUE, eval= TRUE}
+data3 <- data1 %>%
+left_join(data2, data1, by = c("date" = "date"))
+dplyr::select(data3, date, time, weekend_helligdag, everything())
+glimpse(data3)
+
+
+data3 <- data3 %>% 
+  mutate(temp1 = lag(temp_max_past1h, 1),
+         temp2 = lag(temp_max_past1h, 2),
+         temp3 = lag(temp_max_past1h, 3),
+         temp1 = if_else(is.na(temp1), 0, temp1),
+         temp2 = if_else(is.na(temp2), 0, temp2),
+         temp3 = if_else(is.na(temp3), 0, temp3),
+         temp_gt25_3_dage = if_else(temp1 >= 25 & temp2 >= 25 & temp3 >= 25, 1, 0))
+glimpse(data3)
+```
+
+
+```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE}
+
+data3 <- data3 %>%
+filter(efterspørgsel > 47)
+data3 # Observation 1 med 47 og 129 er væk. Der er i alt 150. 
+
+ggplot(data = data3) +
+  geom_histogram(mapping = aes(x = efterspørgsel), color = "black", fill = "grey", binwidth = 60) + 
+  labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
+       subtitle = "Undersøger om efterspørgslen er normaltfordelt",
+       y = "Samlet antal observationer",
+       x = "Butikkernes efterspørgsel af koldskål",
+       caption = "Kilde: Thise Mejeri 2022") +
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  theme(plot.title = element_text(hjust = 0.5, size = 16),
+        plot.subtitle = element_text(hjust = 0.5, size = 14), 
+        plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
+  xlim(150, 950)
+
+
+
+ggplot(data3, aes(x = efterspørgsel)) + 
+  geom_histogram(aes(y =..density..), colour = "black", fill = "gray", binwidth = 60) +
+  geom_density(alpha=0, fill="#FF6666", adjust=1.5) + # Standardiseret så arealet = 1 
+  labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
+       subtitle = "Undersøger om efterspørgslen er normaltfordelt",
+       y = "Antal observationer",
+       x = "Butikkernes efterspørgsel af koldskål",
+       caption = "Kilde: Thise Mejeri 2022") +
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  theme( plot.title = element_text(hjust = 0.5, size = 16),
+         plot.subtitle = element_text(hjust = 0.5, size = 14), 
+         plot.caption = element_text(hjust = 1, face = "italic", size = 10)) + xlim(150, 1000) + ylim(0, 0.005)
+```
+
+
+
+```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE, eval= TRUE}
+
+ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill = forvent_lager)) +
+stat_boxplot(geom = 'errorbar') + # whiskers. 
+geom_boxplot() + 
+labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
+subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
+caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (ltr)",
+x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
+geom_beeswarm(dodge.width=3, cex =1, color = "black") + # Justerer boksbredden.
+ggeasy::easy_center_title() + # Centrerer titlen. 
+theme( plot.title = element_text(hjust = 0.5, size = 14),
+plot.subtitle = element_text(hjust = 0.5, size = 12), 
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+```
+
+
+```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE}
+# Undersøger spredningen af data
+ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill = kamjunk)) +
+stat_boxplot(geom = 'errorbar') +
+geom_boxplot() + 
+labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
+subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
+caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (L).",
+x = "Har butikken kammerjunkere på lager") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+```
+
+```{r, Chunk 10 - Boxplot over efterspørgsel og måned, include=TRUE, eval= TRUE}
+ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel, fill = måned)) +
+stat_boxplot(geom = 'errorbar') +
+geom_boxplot() + 
+labs(title = "Sammenhængen mellem måned og efterspørgsel af koldskål",
+subtitle = "Boxplox der viser variationen ift. den specifikke periode og koldskål",
+caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (L).",
+x = "Måned") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+```
+
+
+```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE}
+# Basic scatter plot.
+ggplot(data3, aes(x = temp_max_past1h, y = efterspørgsel)) + 
+geom_point() +
+geom_smooth(method = lm, se = TRUE) + 
+labs(title = "Sammenhængen mellem temperatur og efterspørgsel af koldskål",
+subtitle = "Linelær regression der viser relationen mellem den forventede lagerbeholdning og koldskål",
+caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (L)",
+x = "Temperatur (Celcius)") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
+xlim(5, 30.70) + ylim(220, 850) +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+
+I dette afsnit vil vi gå i gang med analysen.
+
+```{r, Chunk 12 - Statistisk analyse, include=TRUE, eval= TRUE}
+
+ 
+
+# LOOCV metoden er mindre biased end validation set metoden; hver gang vi fit’er en model, så er det på baggrund af hele datasættet med undtagelse af én observation,
+
+ 
+cor_matrice <- data3 |>  dplyr::select(efterspørgsel, date, temp_min_past1h, temp_dry, temp_max_past1h, temp_mean_past1h, temp1, temp2, temp3)
+plot(cor_matrice)
+
+ 
+# Vi finder den model med den mindste MSE. 
+# n-fold=LOOVC
+
+ 
+
+attach(data3)
+lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + dag + temp_dry + temp_mean_past1h + humidity_past1h + temp_max_past1h)
+summary(lm.fit1)
+
+ 
+
+lm.fit2 = glm(efterspørgsel ~ 1) # simpel model
+summary(lm.fit2)
+
+ 
+
+lm.fit3 = lm(efterspørgsel ~ temp_max_past1h^2) # melllem model. 
+summary(lm.fit3)
+
+ 
+
+lm.fit4 = lm(efterspørgsel ~ temp_max_past1h + temp_max_past1h^5) # ekstrem model 
+summary(lm.fit4)
+
+ 
+
+
+x <- data3$temp_max_past1h
+y <- data3$efterspørgsel
+data <- data.frame(y, x)
+data
+set.seed(1)
+cv.error <- rep(0, 5)
+for (i in 1:5) {
+  glm.fit <- glm(y~poly(x , i), data = data)
+  cv.error[i] <- cv.glm(data , glm.fit)$delta [1]
+}
+cv.error
+
+ 
+
+
+ggplot(data3, mapping = aes(x=x, y=y)) + 
+  geom_point(alpha=1/3) +
+  geom_smooth(method="glm", formula = y ~ poly(x, 1, raw=TRUE), se=FALSE, colour="blue") +
+  geom_smooth(method="glm", formula = y ~ poly(x, 3, raw=TRUE), se=FALSE, colour="green") +
+  geom_smooth(method="glm", formula = y ~ poly(x, 22, raw=TRUE), se=FALSE, colour="red") +
+geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3) + 
+  labs(title = "Sammenligning af tre regressionsmodeller",
+caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål (Liter)",
+x = "Maks temperatur pr.time (Celcius)") +
+ggeasy::easy_center_title() + # Centrerer titlen. 
+theme( plot.title = element_text(hjust = 0.5, size = 16),
+plot.subtitle = element_text(hjust = 0.5, size = 14), 
+plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
+xlim(5, 30.70) + ylim(220, 850) +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+
+
+\newpage
+
+## Tidy
+
+\newpage
+
+## Transformer
+
+\newpage
+
+## Visualiser
+
+\newpage
+
+## Model
+
+\newpage
+
+## Kommunikér/analyse
+
+## Sessioninformation
+
+For at højne reproducerbarheden printes der en udskrift om den nuværende R session:
+
+```{r, Chunk 20 - Info om nuværnde R session, include=TRUE, eval= TRUE}
+SI <- sessionInfo(package = NULL) # Udskriver en liste om denne R session.  
+```
+
+## Litteratur
+
+## Bilag
+>>>>>>> Stashed changes
