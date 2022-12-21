@@ -1,6 +1,6 @@
 ---
 title: "Statistical learning og programmering"
-author: "Af Kenneth Gottfredsen, Eva Imad og Sanne Sørensen"
+author: "Af Kenneth Gottfredsen, Eva Rauff og Sanne Sørensen"
 date: "`r Sys.Date()`"
 output:
   pdf_document: 
@@ -27,11 +27,6 @@ editor_options:
   markdown: 
     wrap: sentence
 ---
-
-<!--- Undgår at koden stikker ud over margen --->
-
-\emergencystretch 3em
-
 
 <!--- Definerer sidehoved og sidefod --->
 
@@ -70,21 +65,11 @@ toupper(code) else code
 })
 ```
 
-The CRoss Industry Standard Process for Data Mining (CRISP-DM) is a process model that serves as the base for a data science process.
-It has six sequential phases:
-
--   Business understanding -- What does the business need?
--   Data understanding -- What data do we have / need? Is it clean?
--   Data preparation -- How do we organize the data for modeling?
--   Modeling -- What modeling techniques should we apply?
--   Evaluation -- Which model best meets the business objectives?
--   Deployment -- How do stakeholders access the results?
-
-
 I første omgang indlæses `pacman::load`:
 
 ```{r, Chunk 1, include=TRUE, eval= TRUE}
-# Inden vi går i gang bruger vi pacman() til at installere og indhente relevante pakker på samme tid. 
+# Inden vi går i gang bruger vi pacman() til at installere og indhente relevante
+# pakker på samme tid. 
 pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "Lahman", "maps", "lubridate", "pryr", "hms", "hexbin",
                "feather", "htmlwidgets", "broom", "pander", "modelr",
@@ -93,7 +78,7 @@ pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "RSQLite", "class", "babynames", "nasaweather",
                "fueleconomy", "viridis", "readxl", "timeDate", "tinytex",
                "ggbeeswarm", "palmerpenguins", "hms", "RColorBrewer", "boot",
-               "openxlsx", "writexl", "pacman", "corrplot")
+               "openxlsx", "writexl")
 ```
 
 \newpage
@@ -110,35 +95,71 @@ str(data1)
 ```
 
 Nu har vi fået indlæst datasættet.
-Det næste skridt er at transformere de forskellige variable:
+Det næste skridt er at transformere de forskellige variabler:
+
+I følgende kode-chunk vil vi rekode og transformere de udvalgte variabler så de 
+stemmer overens med eksamensbesvarelsen. Hele kodestumpen vil blive kædet sammen
+med 'pipe' funktionen' fra dplyr pakken. Omkodningerne bliver til sidst gemt i 
+en ny dataframe som vi kalder data1.
+
+Derefter bruger vi mutate() til at lave en ny kolonne ud fra data1. Først laver
+vi en date-variabel, som vi koder til et date objekt med ymd() funktionen fra 
+lubridate pakken.
+
+I den næste del anvendes mutate() til, at lave en kolonne der hedder dag, som 
+bliver omkodet til en faktor. Dernæst koder vi date til et objekt med ymd() 
+funktionen fra lubridate pakken. "lubridate.week.start",1=mandag, istedet for 
+søndag som er standardindstillingerne i R. 
+
+Dernæst bruger vi mutate() igen til at danne en ny weekend-variabel der hedder 
+weekend_1. I denne sammenhæng vælger vi at fredag, lørdag, søndag og fire andre 
+helligdage er 1, ellers er de andre værdier 0. Dette kaldes for en 
+dummyvariabel. 
+
+Måned, dag, kamjunk, forvent_lager og weekend_1 er alle kategoriske faktorer.
+For at gøre det nemmere at forstå hvad de forskellige værdier udtrykker, 
+navngiver vi disse med fct_recode funktionen.
 
 ```{r, Chunk 3 - Transformering, include=TRUE, eval= TRUE}
-# I denne kode vil vi rekode og transformere de udvalgte variable så de stemmer overens med eksamensbesvarelsen. Hele kodestumpen vil blive kædet sammen med 'pipe' funktionen' fra dplyr pakken. Omkodningerne bliver til sidst gemt i en ny dataframe som vi kalder data1.
-
-# 1 Vi bruger mutate() til at lave en ny kolonne ud fra data 1. Først laver vi en date variabel, som vi koder til et date objekt med ymd() funktionen fra lubridate pakken.
-
-# 2 I den næste del anvendes mutate() til, at lave en kolonne der hedder dag, som bliver omkodet til en faktor. Dernæst koder vi date til et objekt med ymd() funktionen fra lubridate pakken. "lubridate.week.start", 1. 1 referer til mandag som ugestart istedet for søndag som er standardindstillingerne i R. 
-
-# 3 Her bruger vi igen mutate() til at danne en ny weekend-variabel der hedder weekend_1. I denne sammenhæng undersøger vi om fredag, lørdag, søndag og fire helligdage er 1, ellers er de andre værdier 0. Dette kaldes for en dummyvariabel. 
-
-# 4 Måned, dag, kamjunk, forvent_lager og weekend_1 er alle kategoriske faktorer. For at gøre det nemmere at forstå hvad de forskellige værdier udtrykker, navngiver vi disse med fct_recode funktionen.
-
-data1 <- read_excel("data/stud_exam_data.xlsx") %>% 
-mutate(date = ymd(date), måned = factor(month(date)),
-kamjunk = factor(kammerjunkere), forvent_lager = factor(forventet_l_lager)) %>% mutate(dag = as.factor(wday(date, week_start = getOption("lubridate.week.start", 1)))) %>% mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in% ymd("2022-04-14", "2022-04-18", "2022-05-26", "2022-06-06"))) %>% mutate(weekend = factor(weekend_1)) %>% mutate(data1, kamjunk = fct_recode(kammerjunkere, "ja" = "0", "nej" = "1")) %>% mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1", "mellem" = "2", "høj" = "3")) %>% mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5", "juni" = "6", "juli" = "7", "august" = "8")) %>% mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2", "onsdag" = "3", "torsdag" = "4", "fredag" = "5", "lørdag" = "6", "søndag" = "7")) %>% dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager, weekend_helligdag = weekend)
-glimpse(data1)
+data1 <- data1 %>%
+  mutate(date = ymd(date), måned = factor(month(date)),
+         kamjunk = factor(kammerjunkere), forvent_lager =
+           factor(forventet_l_lager)) %>%
+  mutate(dag = as.factor(wday(date, week_start =
+                                getOption("lubridate.week.start", 1)))) %>%
+  mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in%
+                                  ymd("2022-04-14", "2022-04-18", "2022-05-26",
+                                      "2022-06-06"))) %>%
+  mutate(weekend = factor(weekend_1)) %>%
+  mutate(data1, kamjunk = fct_recode(kammerjunkere, "ja" = "0",
+                                     "nej" = "1")) %>%
+  mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1",
+                                           "mellem" = "2", "høj" = "3")) %>%
+  mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5",
+                                   "juni" = "6", "juli" = "7",
+                                   "august" = "8")) %>%
+  mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2",
+                                 "onsdag" = "3", "torsdag" = "4",
+                                 "fredag" = "5", "lørdag" = "6",
+                                 "søndag" = "7")) %>%
+  dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager,
+                weekend_helligdag = weekend)
 ```
 
+I denne kodechunk vil vi lave en HTTP GET-anmodning til en API fra DMI. Vi skal
+bruge adgangen til at få de relevante vejr-variable som vi senere skal bruge i
+vores analyse. API'en leverer til slut et objekt i JSON format som bliver
+transformeret om til en dataframe i stedet for en liste. 
+
+Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API.
+req_url bruges til at udvælge specifikke parametre fra API´en. 
+
 ```{r, Chunk 4 - Vejrdata fra DMI, include=FALSE, eval= TRUE}
-# 1 I denne kodechunk vil vi lave en HTTP get anmodning til en API fra DMI. Vi skal bruge adgangen til at få de relevante vejr-variable som vi senere skal bruge i vores analyse. Api'en leverer til slut et objekt i JSON format som bliver transformeret om til en dataframe i stedet for en liste.  
-
-# 2 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
-
-#  Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
 
 Base_url <- "https://dmigw.govcloud.dk/v2/"	 
 Info_url <- "metObs/collections/observation/items?"
-Req_url <-  "stationId=06186&datetime=2022-04-01T12%3A00%3A00Z%2F2022-08-30T12%3A00%3A00Z&api-key=1fda8cc2-25bf-45e3-9f43-702fb9ccfdf3&limit=80182" 
+Req_url <-  "stationId=06186&datetime=2022-04-01T12%3A00%3A00Z%2F2022-08-
+30T12%3A00%3A00Z&api-key=1fda8cc2-25bf-45e3-9f43-702fb9ccfdf3&limit=80182" 
 # full_url er en sammenkædning af base_url, info_url og reg_url. 
 Full_url <- base::paste0(Base_url, Info_url, Req_url)
 # Anmoder om at få adgang til apién vha. httr pakken. 
@@ -147,7 +168,6 @@ Api_call <- httr::GET(Full_url)
 Api_call$status_code 
 # Undersøger hvilket format apikaldet er. Her er det json format. 
 http_type(Api_call) 
-Api_call$status_code
 # Undersøger rådata. 
 Api_call$content
 # Omdanner rådata til en karakter streng. 
@@ -156,42 +176,62 @@ api_char <- base::rawToChar(Api_call$content)
 api_JSON <- jsonlite::fromJSON(api_char, flatten = TRUE)
 # laver en variabel som bliver kædet sammen til et json objekt.
 list_dmi <- api_JSON
-# Laver et nyt objekt som hedder data2 ud fra list_dmi. Denne liste bliver konverteret til en dataframe, så vi kan arbejde videre med vores data.
+# Laver et nyt objekt som hedder data2 ud fra list_dmi. Denne liste bliver
+# konverteret til en dataframe, så vi kan arbejde videre med vores data.
 data2 <- as.data.frame(do.call(cbind, list_dmi))
-# Vi printer et referat af vores nye dataframe som hedder data2 istedet for data1 som vi indhentede i den forrige kodechunk. 
-glimpse(data2)
+
 ```
 
+I denne kodechunk vil vi transformere den data vi har hentet fra vores API-kald
+til nogle mere brugbare data. 
+
+Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API.
+req_url bruges til at udvælge specifikke parametre fra API´en. 
+
+Derefter bruger vi pivot_wider-funktionen til at sprede variablerne ud i
+separate kolonner.
+
+Vi bruger derefter Mutate-funktionen til at konvertere kolonnen
+'målingstidspunkt' til en datoformat
+Separate-funktionen bruges til at opdele kolonnen 'målingstidspunkt' i to
+separate kolonner som vi navngiver 'date' og 'time'.
+
+Filter-funktionen udvælger rækker, der indeholder de første fire characters: 
+"12:0". 
 
 ```{r, Chunk 5 - Tidy af vejrdata fra DMI, include=TRUE, eval= TRUE}
-# I denne kodechunk vil vi transformere den data vi har hentet fra vores apikald til nogle mere brugbare data. 
-
-# 2 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra api´en. 
-
 
 data2 <- as.data.frame(do.call(cbind, list_dmi))
-data2 <- dplyr::select(data2, features.properties.observed, features.properties.value, features.properties.parameterId) %>% 
-rename(værdi = features.properties.value, parameter = features.properties.parameterId,
-målingstidspunkt = features.properties.observed) %>%
-pivot_wider(names_from = parameter, values_from = værdi) %>% 
-mutate(målingstidspunkt = as_datetime(målingstidspunkt)) %>%
-separate(målingstidspunkt, into = c('date', 'time'), sep = " ") %>% 
-filter(str_sub(time, 1, 4) == "12:0") %>% 
-mutate(date = as_date(date)) %>%
-mutate(time = as.hms(time)) %>% 
-dplyr::select(-(temp_max_past12h:temp_min_past12h))  
-glimpse(data2)
+data2 <- dplyr::select(data2, features.properties.observed,
+                       features.properties.value,
+                       features.properties.parameterId) %>% 
+  rename(værdi = features.properties.value, parameter =
+           features.properties.parameterId,
+         målingstidspunkt = features.properties.observed) %>%
+  pivot_wider(names_from = parameter, values_from = værdi) %>% 
+  mutate(målingstidspunkt = as_datetime(målingstidspunkt)) %>%
+  separate(målingstidspunkt, into = c('date', 'time'), sep = " ") %>% 
+  filter(str_sub(time, 1, 4) == "12:0") %>% 
+  mutate(date = as_date(date)) %>%
+  mutate(time = as_hms(time)) %>% 
+  dplyr::select(-(temp_max_past12h:temp_min_past12h))
 ```
+
+I nedestående kode-chunk merger vi data1 og data2 til data3 for at beholde alle
+observationer i x.
+
+Vi bruger derefter mutate-funktionen til at oprette fire nye variabler i data3 
+kaldet temp_gt25_3_dage. Lag-funktionen er brugt til at lave variablerne, som
+har opfanget forsinkede værdier fra temp1, temp2 og temp3. Afslutningsvis dannes
+variablen 'temp_gt25_3_dage', som måler de dage hvor der har været mere end 
+3 dage i træk med >= 25 grader. Det er en dummyvariabel da vi bruger if_else. 
 
 ```{r, Chunk 6 - Merging af de to datasæt, include=TRUE, eval= TRUE}
 
-
-# Når man merger vha. leftjoin beholder man alle observationer i x.
 data3 <- data1 %>%
 left_join(data2, data1, by = c("date" = "date"))
 dplyr::select(data3, date, time, weekend_helligdag, everything())
 glimpse(data3)
-
 
 data3 <- data3 %>% 
   mutate(temp1 = lag(temp_max_past1h, 1),
@@ -200,85 +240,124 @@ data3 <- data3 %>%
          temp1 = if_else(is.na(temp1), 0, temp1),
          temp2 = if_else(is.na(temp2), 0, temp2),
          temp3 = if_else(is.na(temp3), 0, temp3),
-         temp_gt25_3_dage = if_else(temp1 >= 25 & temp2 >= 25 & temp3 >= 25, 1, 0))
-glimpse(data3)
-
-# Vi skal lave en model der underfitter, en vi synes er sej og en der underfitter. 
+         temp_gt25_3_dage = if_else(temp1 >= 25 & temp2 >= 25 & temp3 >= 25,
+                                    1, 0))
 ```
 
+Først identificerer vi outliers i vores dataset data3. Derefter fjerner vi
+1 outlier som er 47.
 
+Derefter laver vi en ggplot for at se fordelingen af efterspørgselen af koldskål
+i form af en histogram. 
+
+Vi bruger geom_density til at forstå fordelingen og til at forudsige fordelingen
+af koldskål i en anden undersøgelse.
+
+Man kan se at fordelingen er størst omkring 500 liter koldskål.
 
 ```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE}
-# Først vil vi fjerne to outliers. Nemlig den observationer på 47 liter og 129.
+
+boxplot.stats(data3$efterspørgsel)$out
+
 data3 <- data3 %>%
-filter(efterspørgsel < 47 | efterspørgsel > 129)
-data3 # Observation 1 med 47 og 129 er væk. Der er i alt 150. 
+  filter(efterspørgsel > 47)
 
-ggplot(data = data3) +
-geom_histogram(mapping = aes(x = efterspørgsel), color = "black", fill = "grey", binwidth = 60) + 
-labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
-subtitle = "Undersøger om efterspørgslen er normaltfordelt",
-y = "Samlet antal observationer",
-x = "Butikkernes efterspørgsel af koldskål",
-caption = "Kilde: Thise Mejeri 2022") +
-ggeasy::easy_center_title() + # Centrerer titlen. 
-theme( plot.title = element_text(hjust = 0.5, size = 16),
-plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
-xlim(150, 950) 
+ggplot(data3, aes(x = efterspørgsel)) +
+ geom_histogram(aes(y =..density..), colour = "black",
+                fill = "gray", binwidth = 60) +
+ geom_density(alpha=0.5, fill="#FF6666", adjust=1.5) +
+  labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
+       subtitle = "Undersøger om efterspørgslen er normaltfordelt",
+       y = "Antal observationer",
+       x = "Butikkernes efterspørgsel af koldskål",
+       caption = "Kilde: Thise Mejeri 2022") +
+  ggeasy::easy_center_title() + # Centrerer titlen.
+  theme( plot.title = element_text(hjust = 0.5, size = 16),
+         plot.subtitle = element_text(hjust = 0.5, size = 14),
+         plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
+  xlim(150, 1000) + ylim(0, 0.0035)
+
 ```
 
+På følgende kode-chunk har vi lavet et boxplot til at vise den statistiske
+variationen af lagerbeholdningen og efterspørgsel. 
 
+Her kan man se at median-efterspørgslen stiger når man går fra høj til lav
+forventet lagerbeholdning af koldskål. Dette tyder også på at der er en 
+sammenhæng mellem de 2 variabler.
 
-```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE, eval= TRUE}
-ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill = forvent_lager)) +
-stat_boxplot(geom = 'errorbar') + # whiskers. 
-geom_boxplot() + 
-labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
-subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
-caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-y = "Butikkernes efterspørgsel på koldskål (ltr)",
-x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
-geom_beeswarm(dodge.width=3, cex =1, color = "black") + # Justerer boksbredden.
-ggeasy::easy_center_title() + # Centrerer titlen. 
-theme( plot.title = element_text(hjust = 0.5, size = 14),
-plot.subtitle = element_text(hjust = 0.5, size = 12), 
-plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE,eval= TRUE}
+
+ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
+                                     forvent_lager)) +
+  stat_boxplot(geom = 'errorbar') + # whiskers. 
+  geom_boxplot() + 
+  labs(title = "Lagerbeholdningen og efterspørgsel af koldskål",
+       subtitle = "Variationen ift. den forventede lagerbeholdning og koldskål", 
+       caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+       y = "Butikkernes efterspørgsel på koldskål (ltr)",
+       x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
+  geom_beeswarm(dodge.width=3, cex =1, color = "black") + # Justerer boksbredden
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  theme( plot.title = element_text(hjust = 0.5, size = 16),
+         plot.subtitle = element_text(hjust = 0.5, size = 14), 
+         plot.caption = element_text(hjust = 1.3, face = "italic",size = 10 )) +
+  scale_fill_brewer(palette = "Pastel2")
 ```
+
+I næste kode-chunk har vi lavet et boxplot som viser fordelingen af
+efterspørgslen i forhold til om 25% af butikkerne er løbet tør for kammerjunkere
+eller ej.
+På baggrund af plottet kan vi se at hvis butikkerne ikke har kammerjunkere på
+lageret så falder efterspørgslen. Konklusionen er at efterspørgslen på koldskål
+stiger når de er løbet tør for kammerjunkere.
 
 
 ```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE}
-# Undersøger spredningen af data
-ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill = kamjunk)) +
-stat_boxplot(geom = 'errorbar') +
-geom_boxplot() + 
-labs(title = "Sammenhængen mellem lagerbeholdningen og efterspørgsel af koldskål",
-subtitle = "Boxplox der viser variationen ift. den forventede lagerbeholdning og koldskål",
-caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-y = "Butikkernes efterspørgsel på koldskål (L).",
-x = "Har butikken kammerjunkere på lager") +
-ggeasy::easy_center_title() + # Centrerer titlen. 
-geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
-theme( plot.title = element_text(hjust = 0.5, size = 16),
-plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+
+ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
+                                     kamjunk)) +
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot() + 
+  labs(title = "Kammerjunkere og efterspørgsel af koldskål",
+  subtitle = "Variationen ift. den forventede lagerbeholdning af kammerjunker
+  og koldskål",
+  caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+  y = "Butikkernes efterspørgsel på koldskål (L).",
+  x = "Mere end 25% af butikkerne er løbet tør for kammerjunkere") +
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
+  theme( plot.title = element_text(hjust = 0.5, size = 16),
+         plot.subtitle = element_text(hjust = 0.5, size = 14), 
+         plot.caption = element_text(hjust = 1.5, face = "italic",
+                                     size = 10 )) +
+  scale_fill_brewer(palette = "Pastel2")
 
 ```
 
+Forneden har vi lavet et boxplot som viser sammenhængen mellem måned og
+efterspørgslen af koldskål. 
+Det er tydeligt at se at efterspørgslen stiger fra april-juli og derefter falder
+efterspørgslen i august. Hvilket kan tyde på at efterspørgselen af koldskål
+hænger sammen med sommerperioden.
+
 ```{r, Chunk 10 - Boxplot over efterspørgsel og måned, include=TRUE, eval= TRUE}
-ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel, fill = måned)) +
-stat_boxplot(geom = 'errorbar') +
-geom_boxplot() + 
-labs(title = "Sammenhængen mellem måned og efterspørgsel af koldskål",
-subtitle = "Boxplox der viser variationen ift. den specifikke periode og koldskål",
-caption = "Kilde: tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-y = "Butikkernes efterspørgsel på koldskål (L).",
-x = "Måned") +
-ggeasy::easy_center_title() + # Centrerer titlen. 
-geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
-theme( plot.title = element_text(hjust = 0.5, size = 16),
-plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1.5, face = "italic", size = 10 )) + scale_fill_brewer(palette = "Pastel2")
+ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
+                                   fill = måned)) +
+  stat_boxplot(geom = 'errorbar') +
+  geom_boxplot() + 
+  labs(title = "Måned og efterspørgsel af koldskål",
+       subtitle = "Variationen ift. måned og efterspørgelsen af koldskål",
+       caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+       y = "Butikkernes efterspørgsel på koldskål (L).",
+       x = "Måned") +
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
+  theme( plot.title = element_text(hjust = 0.5, size = 16),
+         plot.subtitle = element_text(hjust = 0.5, size = 14), 
+         plot.caption = element_text(hjust = 1.3, face =
+                                       "italic", size = 10 )) +
+  scale_fill_brewer(palette = "Pastel2")
 
 
 ```
@@ -343,6 +422,28 @@ summary(lm.fit3)
 lm.fit4 = lm(efterspørgsel ~ temp_max_past1h + temp_max_past1h^5) # ekstrem model 
 summary(lm.fit4)
 
+x <- data3$temp_max_past1h
+y <- data3$efterspørgsel
+data <- data.frame(y, x)
+data
+set.seed(1)
+cv.error <- rep(0, 5)
+for (i in 1:5) {
+  glm.fit <- glm(y~poly(x , i), data = )
+  cv.error[i] <- cv.glm(data , glm.fit)$delta [1]
+}
+cv.error
+
+glimpse(data3)
+
+cv.error1 <- rep(0, 10)
+for (i in 1:10) {
+  glm.fit1 <- glm(efterspørgsel ~ poly(temp_max_past1h + temp_min_past1h + humidity + temp_dry + temp_dew + humidity_past1h + temp_mean_past1h , i), data = data3)
+  cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
+}
+cv.error1
+
+summary(glm.fit1)
  
 
 
