@@ -360,10 +360,8 @@ ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
 
 
 ```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE}
-# Basic scatter plot med prediktionsinterval. 
-summary(efterspørgsel)
-predict(model1,data.frame(efterspørgsel=(c(520))), interval = "prediction", level = 0.95)
 model1 <- lm(efterspørgsel ~ temp_max_past1h, data = data3)
+predict(model1,data.frame(efterspørgsel=(c(520))), interval = "prediction", level = 0.95)
 prædiktion <- predict(model1, interval = "prediction", level = 0.95)
 new_df <- cbind(data3, prædiktion)
 ggplot(new_df, aes(temp_max_past1h, efterspørgsel))+
@@ -398,9 +396,6 @@ chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 # modellens pålidelighed.
 
 
-
-
-predi
 
 glimpse(data3)
 
