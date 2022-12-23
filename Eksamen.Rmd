@@ -225,7 +225,7 @@ har opfanget forsinkede værdier fra temp1, temp2 og temp3. Afslutningsvis danne
 variablen 'temp_gt25_3_dage', som måler de dage hvor der har været mere end 
 3 dage i træk med >= 25 grader. Det er en dummyvariabel fordi vi bruger if_else. 
 
-```{r, Chunk 6 - Merging af de to datasæt, include=TRUE, eval= TRUE}
+```{r, Chunk 6 - Merging af de to datasæt, include=TRUE, eval= TRUE, warning=FALSE}
 
 data3 <- data1 %>%
 left_join(data2, data1, by = c("date" = "date"))
@@ -246,15 +246,14 @@ data3 <- data3 %>%
 Først identificerer vi outliers i vores dataset data3. Derefter fjerner vi
 1 outlier som er 47.
 
-Derefter laver vi en ggplot for at se fordelingen af efterspørgselen af koldskål
-i form af en histogram. 
+Derefter laver vi en ggplot for at se fordelingen af efterspørgselen af koldskål i form af et histogram. 
 
-Vi bruger geom_density til at forstå fordelingen og til at forudsige fordelingen
-af koldskål i en anden undersøgelse.
+Vi bruger geom_density til at forstå fordelingen og til at forudsige den
+forventede fordeling af efterspørgslen på koldskål. 
+Man kan se at at spredningen af observationerne er størst omkring 500 liter koldskål. Endvidere kan man observere, at efterspørgslen af koldskål er 
+forholdsvis normalfordelt, og at sandsynlighedskurven er klokkeformet.  
 
-Man kan se at fordelingen er størst omkring 500 liter koldskål.
-
-```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE}
+```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
 
 boxplot.stats(data3$efterspørgsel)$out
 
@@ -279,13 +278,13 @@ ggplot(data3, aes(x = efterspørgsel)) +
 ```
 
 På følgende kode-chunk har vi lavet et boxplot til at vise den statistiske
-variationen af lagerbeholdningen og efterspørgsel. 
+variationen ift. butikkens forventede lagerbeholdning og efterspørgslen på koldskål. 
 
 Her kan man se at median-efterspørgslen stiger når man går fra høj til lav
 forventet lagerbeholdning af koldskål. Dette tyder også på at der er en 
 sammenhæng mellem de 2 variabler.
 
-```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE,eval= TRUE}
+```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE,eval= TRUE, warning=FALSE}
 
 ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
                                      forvent_lager)) +
@@ -300,7 +299,7 @@ ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
   ggeasy::easy_center_title() + # Centrerer titlen. 
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 1.3, face = "italic",size = 10 )) +
+         plot.caption = element_text(hjust = 2.3, face = "italic",size = 10 )) +
   scale_fill_brewer(palette = "Pastel2")
 ```
 
@@ -312,7 +311,7 @@ lageret så falder efterspørgslen. Konklusionen er at efterspørgslen på kolds
 stiger når de er løbet tør for kammerjunkere.
 
 
-```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE}
+```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE, warning=FALSE}
 
 ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
                                      kamjunk)) +
@@ -328,7 +327,7 @@ ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
   geom_beeswarm(dodge.width=3,cex=0.5, color = "black") + # Justerer boksbredden.
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 1.5, face = "italic",
+         plot.caption = element_text(hjust = 1.8, face = "italic",
                                      size = 10 )) +
   scale_fill_brewer(palette = "Pastel2")
 ```
@@ -337,9 +336,9 @@ Forneden har vi lavet et boxplot som viser sammenhængen mellem måned og
 efterspørgslen af koldskål. 
 Det er tydeligt at se at efterspørgslen stiger fra april-juli og derefter falder
 efterspørgslen i august. Hvilket kan tyde på at efterspørgselen af koldskål
-hænger sammen med sommerperioden.
+hænger moderat sammen med sommerperioden. Bemærk også at kattehårene på boksplottene er forholdsvis brede, dette indikerer fx. at observationerne ligger langt væk fra medianen hvilket øger den statistiske usikkerhed. 
 
-```{r, Chunk 10 - Boxplot over efterspørgsel og måned, include=TRUE, eval= TRUE}
+```{r, Chunk 10 - Boxplot over efterspørgsel og måned, include=TRUE, eval= TRUE, warning=FALSE}
 ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
                                    fill = måned)) +
   stat_boxplot(geom = 'errorbar') +
@@ -359,16 +358,18 @@ ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
 ```
 
 
-```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE}
-model1 <- lm(efterspørgsel ~ temp_max_past1h, data = data3)
-predict(model1,data.frame(efterspørgsel=(c(520))), interval = "prediction", level = 0.95)
+```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
+attach(data3)
+model1 <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
+predict(model1,data.frame(efterspørgsel=(c(10,20,30))), interval = "prediction", level = 0.95)
+
 prædiktion <- predict(model1, interval = "prediction", level = 0.95)
 new_df <- cbind(data3, prædiktion)
-ggplot(new_df, aes(temp_max_past1h, efterspørgsel))+
+ggplot(new_df, aes(temp_mean_past1h, efterspørgsel))+
     geom_point() +
     geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
     geom_line(aes(y=upr), color = "red", linetype = "dashed")+
-    geom_smooth(method=lm, se=TRUE) + 
+    geom_smooth(method=lm, se=TRUE) +
     labs(title = "Sammenhængen mellem temperatur og efterspørgsel af koldskål",
     subtitle = "Linelær regression der viser relationen mellem den forventede lagerbeholdning og koldskål",
     caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
@@ -385,23 +386,29 @@ xlim(5, 30.70) + ylim(220, 900)
 I dette afsnit vil vi gå i gang med analysen.
 
 ```{r, Chunk 12 - Statistisk analyse, include=TRUE, eval= TRUE, warning=FALSE}
-
 # Tester for samvariation og multikolinearitet på de kontinuerte variabler. 
 cor_matrice <- data3 |>  
   dplyr::select(efterspørgsel, temp_min_past1h,
-                temp_dry, temp_max_past1h,                                                     temp_mean_past1h, temp1, temp2, temp3) 
+                temp_dry, temp_max_past1h,                                                     temp_mean_past1h) 
 chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 # Der er stærk multikolinearitet, det kan være et problem ift. tolkningen af
 # vores multible regressionsmodel. Dette har også en negativ indvirkning på 
 # modellens pålidelighed.
 
+```
+
+
+```{r, Chunk 13 - Statistisk analyse, include=TRUE, eval= TRUE, warning=FALSE}
 
 
 glimpse(data3)
 
 attach(data3)
-lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + temp_max_past1h)
+lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + temp_mean_past1h + temp1 + temp2 + temp3)
 vif(lm.fit1) # VIF > 1 indikerer at der er inflation i variansen på alle variabler. 
+vif(lm.fit1)
+
+
 summary(lm.fit1)
 plot(lm.fit1)
 # R^2 indikerer at de uafhængige variable forklarer 58% af variansens i data. 
@@ -413,12 +420,12 @@ summary(lm.fit2)
 
  
 
-lm.fit3 = lm(efterspørgsel ~ temp_max_past1h^2) # melllem model. 
+lm.fit3 = lm(efterspørgsel ~ temp_mean_past1h^2) # melllem model. 
 summary(lm.fit3)
 
  
 
-lm.fit4 = lm(efterspørgsel ~ temp_max_past1h + temp_max_past1h^5) # ekstrem model 
+lm.fit4 = lm(efterspørgsel ~ temp_mean_past1h + temp_mean_past1h^5) # ekstrem model 
 summary(lm.fit4)
 
 x <- data3$temp_max_past1h
@@ -436,7 +443,7 @@ cv.error
 
 cv.error1 <- rep(0, 10)
 for (i in 1:10) {
-  glm.fit1 <- glm(efterspørgsel ~ poly(temp_max_past1h, i), data = data3)
+  glm.fit1 <- glm(efterspørgsel ~ poly(temp_mean_past1h, i), data = data3)
   cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
 }
 cv.error1
@@ -453,7 +460,7 @@ summary(glm.fit1)
 
 cv.error1 <- rep(0, 10)
 for (i in 1:10) {
-  glm.fit3 <- glm(efterspørgsel ~ poly(temp_max_past1h, i), data = data3)
+  glm.fit3 <- glm(efterspørgsel ~ poly(temp_mean_past1h, i), data = data3)
   cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
 }
 cv.error1
@@ -462,7 +469,7 @@ summary(glm.fit1)
  
 
 
-x <- data3$temp_max_past1h
+x <- data3$temp_mean_past1h
 y <- data3$efterspørgsel
 data <- data.frame(y, x)
 
@@ -480,7 +487,7 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
-xlim(5, 30.70) + ylim(220, 850) 
+xlim(5, 31) + ylim(220, 900) 
 ```
 
 
