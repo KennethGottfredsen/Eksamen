@@ -273,7 +273,7 @@ ggplot(data3, aes(x = efterspørgsel)) +
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14),
          plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
-  xlim(150, 1000) + ylim(0, 0.0035)
+  xlim(129, 850) + ylim(0, 0.0035)
 
 ```
 
@@ -361,10 +361,10 @@ ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
 ```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
 attach(data3)
 model1 <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
-predict(model1,data.frame(efterspørgsel=(c(10,20,30))), interval = "prediction", level = 0.95)
-
+predict(model1,data.frame(temp_mean_past1h), interval = "prediction", level = 0.95)
+predict(model1,data.frame(temp_mean_past1h=(c(10,20,30))), interval = "prediction", level = 0.95)
 prædiktion <- predict(model1, interval = "prediction", level = 0.95)
-new_df <- cbind(data3, prædiktion)
+ny_df <- cbind(data3, prædiktion)
 ggplot(new_df, aes(temp_mean_past1h, efterspørgsel))+
     geom_point() +
     geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
@@ -379,7 +379,7 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
-xlim(5, 30.70) + ylim(220, 900)
+xlim(4.6, 30.8) + ylim(129, 850)
 ```
 
 
@@ -402,31 +402,75 @@ chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 
 
 glimpse(data3)
+# + I(temp_mean^8)
+fit <- lm(efterspørgsel ~., data = data3) # kompleks model med alle variable. 
+summary(fit)
+
+fit2 <- lm(efterspørgsel ~ dag, data = data3) 
+summary(fit2)
+
+
 
 attach(data3)
-lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + temp_mean_past1h + temp1 + temp2 + temp3)
+lm.fit1 = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + I(temp_mean_past1h^1))
 vif(lm.fit1) # VIF > 1 indikerer at der er inflation i variansen på alle variabler. 
-vif(lm.fit1)
-
-
 summary(lm.fit1)
 plot(lm.fit1)
 # R^2 indikerer at de uafhængige variable forklarer 58% af variansens i data. 
 
+
+
+
+
+
+
  
 
-lm.fit2 = lm(efterspørgsel ~ 1) # simpel model
+lm.fit1 = lm(efterspørgsel ~ 1) # simpel model
+summary(lm.fit2)
+
+
+lm.fit2 <- lm(efterspørgsel ~ poly(temp_mean_past1h, degree = 4), data = data3)
 summary(lm.fit2)
 
  
-
-lm.fit3 = lm(efterspørgsel ~ temp_mean_past1h^2) # melllem model. 
-summary(lm.fit3)
-
- 
-
 lm.fit4 = lm(efterspørgsel ~ temp_mean_past1h + temp_mean_past1h^5) # ekstrem model 
 summary(lm.fit4)
+
+
+glm.fit2 <- glm(efterspørgsel~. -temp_mean_past1h^2, data = data3) # ekstrem model i første grad 
+cv.err2 <- cv.glm(data3, glm.fit2)
+cv.err2$delta[[1]]
+
+glm.fit3 <- glm(efterspørgsel ~ . + I(temp_mean_past1h^2) -humidity_past1h, data = data3) # Ekstrem model i anden grad.
+cv.err3 <- cv.glm(data3, glm.fit3)
+cv.err3$delta[[1]]
+summary(glm.fit3)
+
+
+glm.fit1 = glm(efterspørgsel ~ 1) # simpel model
+summary(lm.fit1)
+
+
+glm.fit3 <- glm(efterspørgsel ~ + forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + temp_mean_past1h, data = data3) 
+cv.err3 <- cv.glm(data3, glm.fit3) # Mellem. 
+cv.err3$delta[[1]]
+summary(glm.fit3)
+
+
+glm.fit3 <- glm(efterspørgsel ~ + forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + I(temp_mean_past1h^3), data = data3) 
+cv.err3 <- cv.glm(data3, glm.fit3) # Kompleks model overfitter, da MSE stiger. 
+cv.err3$delta[[1]]
+summary(glm.fit3)
+
+
+glm.fit3 <- glm(efterspørgsel ~ + forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + I(temp_mean_past1h^22), data = data3) 
+cv.err3 <- cv.glm(data3, glm.fit3)
+cv.err3$delta[[1]]
+summary(glm.fit3)
+
+
+
 
 x <- data3$temp_max_past1h
 y <- data3$efterspørgsel
@@ -435,7 +479,7 @@ data
 set.seed(1)
 cv.error <- rep(0, 5)
 for (i in 1:5) {
-  glm.fit <- glm(y~poly(x , i), data = )
+  glm.fit <- glm(y~poly(x , i), data = data3)
   cv.error[i] <- cv.glm(data , glm.fit)$delta [1]
 }
 cv.error
@@ -443,24 +487,24 @@ cv.error
 
 cv.error1 <- rep(0, 10)
 for (i in 1:10) {
-  glm.fit1 <- glm(efterspørgsel ~ poly(temp_mean_past1h, i), data = data3)
+  glm.fit1 <- glm(efterspørgsel ~ poly(temp_mean_past1h + temp1 + temp2 + temp3, i), data = data3)
   cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
 }
 cv.error1
 summary(glm.fit1)
 
-cv.error1 <- rep(0, 10)
-for (i in 1:10) {
+cv.error1 <- rep(0, 5)
+for (i in 1:5) {
   glm.fit2 <- glm(efterspørgsel ~ poly(temp_max_past1h, i), data = data3)
-  cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
+  cv.error1[i] <- cv.glm(data3, glm.fit2)$delta[1]
 }
 cv.error1
-summary(glm.fit1)
+summary(glm.fit2)
  
 
 cv.error1 <- rep(0, 10)
 for (i in 1:10) {
-  glm.fit3 <- glm(efterspørgsel ~ poly(temp_mean_past1h, i), data = data3)
+  glm.fit3 <- glm(efterspørgsel ~ . + I(temp_max_past1h^2) -humidity_past1h, data = data3)
   cv.error1[i] <- cv.glm(data3, glm.fit1)$delta[1]
 }
 cv.error1
