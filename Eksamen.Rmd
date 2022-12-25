@@ -58,6 +58,10 @@ options(tinytex.verbose = TRUE)
 ```
 \newpage
 
+## Problemfelt
+
+## Videnskabsteori og metode
+
 ## Fra forretningsproblem til datamining problem
 
 Thise fortæller, at de har svært at forudsige præcist hvor mange liter koldskål produktionsafdelingen skal producere.
@@ -109,14 +113,12 @@ str(data1)
 
 ## Tidying og transformering af datasæt
 
-Nu har vi fået indlæst datasættet. Det næste skridt er gøre strukturen i vores dataframe nemmere at arbejde med og mere læsevenlig. Denne proces kaldes for tidy data, det betyder at hver variabel har en kolonne, hver observation en række, samt hver observationsenhed er i en tabel (Wickham 2022). Dette vil gøre analysearbejdet væsentlig nemmere. Vi starter ud med at rekode nogle af variablerne, så de stemmer overens med hvad der står i opgavebesvarelsen.   
+Nu har vi fået indlæst datasættet. Det næste skridt er gøre strukturen i vores dataframe nemmere, at arbejde med og mere læsevenlig. Denne proces kaldes for tidy data, det betyder at hver variabel har en kolonne, hver observation en række, samt hver observationsenhed er i en tabel (Wickham 2022). Dette vil gøre analysearbejdet væsentlig nemmere. Vi starter ud med at rekode nogle af variablerne, så de stemmer overens med hvad der står i opgavebesvarelsen.   
 
-I nedestående kode-chunk vil vi rekode og transformere de udvalgte variabler så de stemmer overens med eksamensbesvarelsen.
-Hele kodestumpen vil blive kædet sammen med 'pipe' funktionen' fra dplyr pakken.
-Omkodningerne bliver til sidst gemt i en ny dataframe som vi kalder data1.
+I nedestående kode-chunk rekodes og transformeres de udvalgte variabler så de stemmer overens med eksamensbesvarelsen. Hele kodestumpen vil blive kædet sammen med 'pipe' funktionen' fra dplyr pakken. Omkodningerne bliver til sidst gemt i en ny dataframe som kaldes data1.
 
-Derefter bruger vi mutate() til at lave en ny kolonne ud fra data1.
-Først laver vi en date-variabel, som vi koder til et date objekt med `ymd()` fra lubridate pakken.
+Derefter bruges mutate() til at lave en ny kolonne ud fra data1.
+Først laves der en date-variabel, som bliver kodet om til et date objekt med `ymd()` fra lubridate pakken.
 
 I den næste del anvendes `mutate()` til, at lave en kolonne der hedder dag, som bliver omkodet til en faktor.
 Dernæst koder vi date til et objekt med `ymd()` funktionen fra lubridate pakken.
@@ -247,17 +249,16 @@ data3 <- data3 %>%
 
 Nu er vores data blevet gjort tidy, det næste skridt er at undersøge hvilke  vejr-mønstre og tendenser der hænger sammen med butikkernes efterspørgslen af koldskål i det sammenkoblede datasæt, som vi har kaldt data3. Vi går derfor i gang med den eksplorative del af analysen. 
 
-Først identificerer vi outliers i vores dataset data3.
-Derefter fjerner vi 1 outlier som er 47, da den skiller sig væsentligt ud i forhold til de andre observationer. Umiddelbart vurderer vi ikke, at der er mange outliers i vores data som kan have indflydelse på den samlede varians, hvorfor vi kun har fjernet den ene. Tilbage er der n = 151 i vores datasæt.  
+Først identificeres potentielle outliers i vores dataset. Derefter fjerner vi 1 outlier som er 47, da den skiller sig væsentligt ud i forhold til de andre observationer. Umiddelbart vurderes det ikke, at der er mange outliers i vores data som kan have indflydelse på den samlede varians, hvorfor vi kun har fjernet den ene. Tilbage er der n = 151 i vores datasæt.  
 
-Derefter laver vi en ggplot for at se fordelingen af efterspørgselen af koldskål i form af simpelt histogram, fordi efterspørgslen er en kontinuert variabel. Det er derfor muligt, at beregne spredningen mellem observationerne.
+Derefter laves der et ggplot for at se fordelingen af efterspørgselen af koldskål i form af simpelt histogram, fordi efterspørgslen er en kontinuert variabel. Det er derfor muligt, at beregne spredningen mellem observationerne.
 
-Vi bruger `geom_density()` funktionen til, at forstå fordelingen og til at forudsige den forventede fordeling af efterspørgslen på koldskål.
+`geom_density()` funktionen bruges til, at forstå fordelingen og til at forudsige den forventede fordeling af efterspørgslen på koldskål.
 Man kan se at at spredningen af observationerne er størst omkring 500.
 Endvidere kan det ses, at efterspørgslen af koldskål er tilnærmelsesvis normalfordelt, og at sandsynlighedskurven er symmetrisk klokkeformet.
 
-Dog kan vi også se, at nogle af observationerne falder udenfor, hvilket kan skyldes tilfældig variation eller systematiske fejl. 
-Vi ved derfor, at ca. 50% af observationerne befinder sig til venstre og højre af midten dvs.middelværdien. At vores data er normalfordelt er en fordel, fordi den lineære regressionsmodel som vi senere vil udføre er en parametrisk test, som bla. kræver at data er normaltfordelt.
+Dog kan man også se, at nogle af observationerne falder udenfor, hvilket kan skyldes tilfældig variation eller systematiske fejl. 
+Man ved derfor, at ca. 50% af observationerne befinder sig til venstre og højre af midten dvs.middelværdien. At vores data er normalfordelt er en fordel, fordi den lineære regressionsmodel som er en parametrisk test, som bla. kræver at data er normaltfordelt. 
 
 ```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -282,7 +283,7 @@ theme_gray()
 
 ```
 
-I følgende kode-chunk har vi lavet et boxplot til at vise den statistiske variationen ift.butikkens forventede lagerbeholdning og efterspørgslen på koldskål.
+I følgende kode-chunk har er der lavet et boxplot til at vise den statistiske variationen ift.butikkens forventede lagerbeholdning og efterspørgslen på koldskål.
 
 Her kan man se at median-efterspørgslen stiger når man går fra høj til lav forventet lagerbeholdning af koldskål. Dette tyder også på at der er en signifikant sammenhæng mellem de 2 variabler. Man kan også se, at der er fx. ved en høj forventet lagerbeholdning er en relativ stor usikkerhed i forhold til mellem og lav lagerbeholdning, dette indikerer at datapunkterne er en del spredt ud.  
 
@@ -306,8 +307,8 @@ ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
   theme_gray()
 ```
 
-I næste kode-chunk har vi lavet et boxplot som viser fordelingen af efterspørgslen i forhold til om 25% af butikkerne er løbet tør for kammerjunkere eller ej.
-På baggrund af plottet kan vi se at hvis butikkerne ikke har kammerjunkere på lageret så falder efterspørgslen. Det betyder at Efterspørgslen på koldskål stiger når de er løbet tør for kammerjunkere.
+I næste kode-chunk er der lavet et boxplot som viser fordelingen af efterspørgslen i forhold til om 25% af butikkerne er løbet tør for kammerjunkere eller ej.
+På baggrund af plottet kan man se at hvis butikkerne ikke har kammerjunkere på lageret så falder efterspørgslen. Det betyder at Efterspørgslen på koldskål stiger når de er løbet tør for kammerjunkere.
 
 ```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -363,7 +364,7 @@ ggplot(ny_df, aes(temp_mean_past1h, efterspørgsel)) +
     geom_point() +
     geom_line(aes(y=lwr), color = "red", linetype = "dashed") +
     geom_line(aes(y=upr), color = "red", linetype = "dashed") +
-    geom_smooth(method=lm, se = TRUE) +
+    geom_smooth(method = lm, se = TRUE) +
     labs(title = "Sammenhængen mellem temperatur og efterspørgsel af koldskål",
     subtitle = "Linelær regression der viser relationen mellem den forventede                  lagerbeholdning og koldskål",
     caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
@@ -386,7 +387,7 @@ $$
  \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2... + \hat{\beta_p}x_p + \epsilon
 $$
 $\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$.  
-$\hat{y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Dog vil det aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved - den type fejl vil altid være til stede (Hastie et.al 2021).
+$\hat{y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Dog vil det aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl vil altid være til stede (Hastie et.al 2021).
 
 
 ## Modeludvælgelse og test på træningsdata
