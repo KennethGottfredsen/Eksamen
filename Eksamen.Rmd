@@ -194,7 +194,7 @@ I denne kodechunk vil vi transformere den data vi har hentet fra vores API-kald 
 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API.
 req_url bruges til at udvælge specifikke parametre fra API´en.
 
-Derefter bruger vi `pivot_wider()`-funktionen til at sprede variablerne ud i separate kolonner.
+Derefter bruger vi `pivot_wider()`-funktionen til at sprede variablerne ud i deres egne separate kolonner.
 
 Vi bruger derefter Mutate-funktionen til at konvertere kolonnen 'målingstidspunkt' til en datoformat Separate-funktionen bruges til at opdele kolonnen 'målingstidspunkt' i to separate kolonner som vi navngiver 'date' og 'time'.
 
@@ -296,9 +296,9 @@ ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
        subtitle = "Variationen ift. den forventede lagerbeholdning og koldskål", 
        caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
        y = "Butikkernes efterspørgsel på koldskål (ltr)",
-       x = "Butikkens forventede lagerbeholdning") + # Undgår overplotting
-  geom_beeswarm(dodge.width=3, cex = 1, color = "black") + # Justerer boksbredden
-  ggeasy::easy_center_title() + # Centrerer titlen. 
+       x = "Butikkens forventede lagerbeholdning") + 
+  geom_beeswarm(dodge.width=3, cex = 1, color = "black") + # undgår overplot.
+  ggeasy::easy_center_title() +
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
          plot.caption = element_text(hjust = 1, face = "italic",size = 10 )) +
@@ -313,7 +313,7 @@ På baggrund af plottet kan vi se at hvis butikkerne ikke har kammerjunkere på 
 
 ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
                                      kamjunk)) +
-  stat_boxplot(geom = 'errorbar') +
+  stat_boxplot(geom = 'errorbar') + 
   geom_boxplot() + 
   labs(title = "Kammerjunkere og efterspørgsel af koldskål",
   subtitle = "Variationen ift. den forventede lagerbeholdning af kammerjunker
@@ -353,15 +353,12 @@ ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
   theme_gray()
 ```
 
-
+`predict` 
 
 ```{r, Chunk 11 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
-attach(data3)
 model1 <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
-predict(model1,data.frame(temp_mean_past1h = (c(10,20,30))), interval = "prediction", level = 0.95)
 prædiktion <- predict(model1, interval = "prediction", level = 0.95)
 ny_df <- cbind(data3, prædiktion)
-
 ggplot(ny_df, aes(temp_mean_past1h, efterspørgsel)) +
     geom_point() +
     geom_line(aes(y=lwr), color = "red", linetype = "dashed") +
@@ -376,13 +373,27 @@ ggeasy::easy_center_title() + # Centrerer titlen.
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 14), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
-xlim(4.6, 30.8) + ylim(129, 850) + 
+xlim(4.6, 30.8) + ylim(150, 850) + 
 theme_gray()
 ```
 
-## Modeludvælgelse
 
-I dette afsnit vil vi gå i gang med regressionsanalysen. Vi træner først vores model på vores træningsdata, fordi vi gerne vil justere vores modelparametre. Vi bruger med andre ord træningsdata til, at fintune vores regressionsmodel. Når modellen er blevet trænet igennem, bliver den afprøvet af på testdata, fordi vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgslen på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi.   
+## Metodevalg
+
+Den statistiske metode vi vil anvende i denne undersøgelse, kaldes for superviseret metode, fordi den tager udgangspunkt i én afhængig variabel. Den konkrete metode er en multibel lineær regression. Den vil vi anvende til og forudsige efterspørgslen på koldskål i liter fremadrettet på baggrund af effekten af nogle uafhængige vejr-variabler. Når vi først har trænet vores model på træningsdata og fået beregnet de nødvendige koefficienter, får alle variablerne i ligningen smidt en hat på toppen - dette indikerer prædiktion (Hastie et.al 2021). Den generelle formel bliver beskrevet nedenunder:    
+
+$$
+ \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2... + \hat{\beta_p}x_p + \epsilon
+$$
+$\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$.  
+$\hat{y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Dog vil det aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved - den type fejl vil altid være til stede (Hastie et.al 2021).
+
+
+## Modeludvælgelse og test på træningsdata
+
+I dette afsnit vil vi gå i gang med regressionsanalysen. Vi træner først vores model på vores træningsdata, fordi vi gerne vil tilpasse vores modelparametre. Vi bruger træningsdata til, at fintune vores regressionsmodel. Når modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgslen på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi.   
+
+
 
 ```{r, Chunk 12 - Statistisk analyse, include=TRUE, eval= TRUE, warning=FALSE}
 # Tester for samvariation og multikolinearitet på de kontinuerte variabler. 
@@ -390,7 +401,8 @@ cor_matrice <- data3 |>
   dplyr::select(efterspørgsel, 
                temp_min_past1h,
                temp_dry,
-               temp_max_past1h,                                                               temp_mean_past1h) 
+               temp_max_past1h,                                                               temp_mean_past1h,
+               humidity) 
 chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 # Der er stærk multikolinearitet, det kan være et problem ift. tolkningen af
 # vores multible regressionsmodel. Dette har også en negativ indvirkning på 
@@ -398,7 +410,7 @@ chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 
 ```
 
-Eftersom antallet af variabler i vores datasæt er større end antallet af observationer, vil vi bruge backward-selection til, at udvælge de uafhængige variable der skal med i vores model. Det vil sige, at vi spytter alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage.
+Eftersom antallet af variabler i vores datasæt er større end antallet af observationer, vil vi bruge backward-selection til, at udvælge de uafhængige variabler der skal med i modellen. Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage.
 
 
 ```{r, Chunk 13 - Backward selection, include=TRUE, eval= TRUE, warning=FALSE}
@@ -406,6 +418,7 @@ lm.fit10 <- lm(efterspørgsel ~., data = data3)
 summary(lm.fit10)
 lm.fit11 <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
 summary(lm.fit11)
+predict(model1,data.frame(temp_mean_past1h = (c(10,20,30))), interval = "prediction", level = 0.95)
 ```
 
 
@@ -420,7 +433,7 @@ summary(lm.fit1)
 
 
 ```{r, Chunk 14 - Statistisk analyse, include=TRUE, eval= TRUE, warning=FALSE}
-
+attach(data3)
 lm.fit1 = lm(efterspørgsel ~ 1) # simpel model
 coef(lm.fit1) # Skæringen med y aksen er hvor den gennemsnitlige efterspørgsel
 # af koldskål er 520.22 liter. 
@@ -510,7 +523,7 @@ xlim(5, 31) + ylim(220, 900) +
 
 ## Sessioninformation
 
-For at højne reproducerbarheden printes der en udskrift om den nuværende R session:
+For at højne gennemsnigtigheden printes der en udskrift om den nuværende R session:
 
 ```{r, Chunk 20 - Info om nuværnde R session, include=TRUE, eval= TRUE}
 SI <- sessionInfo(package = NULL) # Udskriver en liste om denne R session.  

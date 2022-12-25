@@ -1,12 +1,15 @@
 \babel@toc {danish}{}\relax 
 \contentsline {section}{Fra forretningsproblem til datamining problem}{1}{section*.2}%
 \contentsline {section}{Import}{2}{section*.3}%
-\contentsline {section}{Tidying af vores datasæt}{2}{section*.4}%
-\contentsline {section}{Tidy}{21}{section*.5}%
-\contentsline {section}{Transformer}{22}{section*.6}%
-\contentsline {section}{Visualiser}{23}{section*.7}%
-\contentsline {section}{Model}{24}{section*.8}%
-\contentsline {section}{Kommunikér/analyse}{25}{section*.9}%
-\contentsline {section}{Sessioninformation}{25}{section*.10}%
-\contentsline {section}{Litteratur}{25}{section*.11}%
-\contentsline {section}{Bilag}{25}{section*.12}%
+\contentsline {section}{Tidying og transformering af datasæt}{2}{section*.4}%
+\contentsline {section}{Datavisualisering og eksplorativ analyse}{6}{section*.5}%
+\contentsline {section}{Metodevalg}{13}{section*.6}%
+\contentsline {section}{Modeludvælgelse og test på træningsdata}{14}{section*.7}%
+\contentsline {section}{Tidy}{27}{section*.8}%
+\contentsline {section}{Transformer}{28}{section*.9}%
+\contentsline {section}{Visualiser}{29}{section*.10}%
+\contentsline {section}{Model}{30}{section*.11}%
+\contentsline {section}{Kommunikér/analyse}{31}{section*.12}%
+\contentsline {section}{Sessioninformation}{31}{section*.13}%
+\contentsline {section}{Litteratur}{31}{section*.14}%
+\contentsline {section}{Bilag}{31}{section*.15}%
