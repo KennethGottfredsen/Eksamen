@@ -283,9 +283,9 @@ data3 <- data3 %>%
   filter(efterspørgsel > 47)
 
 ggplot(data3, aes(x = efterspørgsel)) +
- geom_histogram(aes(y =..density..), colour = "black",
-                fill = "gray", binwidth = 90) +
- geom_density(alpha=0.5, fill="#FF6666", adjust=1.6) +
+ geom_histogram(aes(y = ..density..), color = "grey",
+                fill = "black", binwidth = 90) +
+ geom_density(alpha = 0.5, fill="#FF6666", adjust = 1.6) +
   labs(title = "Histogram over butikkernes efterspørgsel af koldskål",
        subtitle = "Undersøger om efterspørgslen er normaltfordelt",
        y = "Antal observationer",
@@ -315,13 +315,13 @@ ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
   labs(title = "Lagerbeholdningen og efterspørgsel af koldskål",
        subtitle = "Variationen ift. den forventede lagerbeholdning og koldskål", 
        caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-       y = "Butikkernes efterspørgsel på koldskål (ltr)",
+       y = "Butikkernes efterspørgsel på koldskål i ltr.",
        x = "Butikkens forventede lagerbeholdning") + 
   geom_beeswarm(dodge.width=3, cex = 1, color = "black") + # undgår overplot.
   ggeasy::easy_center_title() +
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 2.5, face = "italic",size = 10 )) +
+         plot.caption = element_text(hjust = 2.4, face = "italic",size = 10 )) +
   scale_fill_brewer(palette = "Pastel2")
 ```
 
@@ -340,13 +340,13 @@ ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
   subtitle = "Den forventede lagerbeholdning af kammerjunker
   og koldskål",
   caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-  y = "Butikkernes efterspørgsel på koldskål (L).",
+  y = "Butikkernes efterspørgsel på koldskål i ltr.",
   x = "Mere end 25% af butikkerne er løbet tør for kammerjunkere") +
   ggeasy::easy_center_title() + # Centrerer titlen. 
   geom_beeswarm(dodge.width=3,cex=1, color = "black") + # Justerer boksbredden.
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 1.8, face = "italic",
+         plot.caption = element_text(hjust = 1.7, face = "italic",
                                      size = 10 )) +
   scale_fill_brewer(palette = "Pastel2")
 ```
@@ -366,7 +366,7 @@ ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
   labs(title = "Måned og efterspørgsel af koldskål",
        subtitle = "Variationen ift. måned og efterspørgelsen af koldskål",
        caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-       y = "Butikkernes efterspørgsel på koldskål (L).",
+       y = "Butikkernes efterspørgsel på koldskål i ltr.",
        x = "Måned") +
   ggeasy::easy_center_title() + # Centrerer titlen. 
   geom_beeswarm(dodge.width = 3,cex = 0.5, color = "black") + # Justerer boksbredden.
@@ -390,16 +390,13 @@ Dette kaldes for multikolinearitet.
 Det vil sige, hvis de blev brugt i den endelige model ville det være vanskeligt, at fortolke på koefficienterne.
 Fordi en Model med høj multikolinearitet bliver mindre præcis og mindre pålidelig.
 
-Eftersom antallet af variabler i vores datasæt er større end antallet af observationer, vil vi bruge backward-selection til, at udvælge de uafhængige variabler der skal med i modellen.
-Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage.
-
 ```{r, Chunk 11 - Korrelationsmatrice, include=TRUE, eval= TRUE, warning=FALSE}
 
 cor_matrice <- data3 %>%   
   dplyr::select(efterspørgsel, 
                temp_min_past1h,
                temp_dry,
-               temp_max_past1h,                                                                temp_mean_past1h,
+               temp_max_past1h,                                                               temp_mean_past1h,
                humidity) 
 chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 ```
@@ -407,7 +404,7 @@ chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits-temperaturen.
 Derfor har vi valgt at bruge denne variabel som den uafhængige effekt i næste kodechunk. Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits-temperaturen. 
 
-Efterspørgslen af koldskål bliver prædiktet ud fra den gennemsnitlige temperatur hver time i °C. Først ved 10, 20 og 30 grader. Den grå linje omkring tendenslinjen referer til konfidensintervallet på den gennemsnitlige efterspørgsel på koldskål ved en given temperatur. Mange af observationerne er placeret udenfor dette bånd, hvorfor det er besluttet at anvende et prædiktionsinterval i stedet - der er den røde stiplede linje. Formålet er med andre ord, at indfange usikkerheden omkring de individuelle værdier og ikke usikkerheden omkring gennemsnittet. 
+Efterspørgslen af koldskål bliver prædiktet ud fra den gennemsnitlige temperatur hver time i °C. Først ved 10, 20 og 30 grader. Den grå linje omkring tendenslinjen referer til konfidensintervallet af den gennemsnitlige efterspørgsel på koldskål ved en given temperatur. Mange af observationerne er placeret udenfor dette bånd, hvorfor det er besluttet at anvende et prædiktionsinterval i stedet - der er den røde stiplede linje. Formålet er med andre ord, at indfange usikkerheden omkring de individuelle værdier og ikke usikkerheden omkring gennemsnittet. 
 
 Når den gennemsnitlige temperatur hver time er 10 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation være 440.64 liter.
 Ved samme temperatur vil efterspørgslen med 95% sikkerhed være [181.78:699.51].
@@ -443,13 +440,16 @@ xlim(4.6, 30.8) + ylim(150, 850)
 
 ## Modeludvælgelse og test på træningsdata
 
+Da antallet af variabler i det samlede datasæt er mindre end antallet af observationer, benyttes backward-selection til, at udvælge de uafhængige variabler som fremadrettet skal indgå i de forskellige modeller.
+Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage.
+
 Vi træner først vores model på vores træningsdata, fordi vi gerne vil tilpasse modelparametrene.
 Vi bruger træningsdata til, at fintune vores regressionsmodel.
 Når modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgslen på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi.
 
 # Baseline model på træningsdata
 
-Baseline modellen er den simpleste uden uafhængige variabler. Her er den gennemsnitlige efterspørgsel den afhængige variabel. Baselinemodellen har MSE = $19.376$ hvilket er meget langt fra 0.  
+Baseline modellen er den simpleste uden uafhængige variabler. Her er den gennemsnitlige efterspørgsel den afhængige variabel. Baselinemodellen har MSE = $19.376$, det er meget langt fra 0.  
 
 # Simpel model på træningsdata
 
@@ -530,27 +530,7 @@ På baggrund af vores MSE værdier, har vi opstillet et histogram der visuelt vi
 
 
 
-```{r, Chunk 15 - Sammenligning af MSE, include=TRUE, eval= FALSE, warning=FALSE}
-
-LOOCV_Metode <- c("Testmodel", "Testmodel", "Testmodel", "Testmodel", "Træningsmodel", "Træningsmodel", "Træningsmodel", "Træningsmodel")
-Modelkompleksitet <- c("Baseline", "Kompleks", "Mellem", "Simpel","Simpel", "Mellem", "Kompleks", "Baseline")
-MSE <- c(19376, 7987, 7841, 16993, 16576, 6740, 6923, 19635)
-df_mse <- data.frame(LOOCV_Metode, MSE, Modelkompleksitet)
-print (df_mse)
-str(df_mse)
-
-ggplot(df_mse) + 
-geom_bar(aes(x=Modelkompleksitet, y=MSE, fill=LOOCV_Metode), 
-stat="identity", # Don't transform the data
-position = "dodge") + 
-labs(title = "Sammenligning af trænings og test MSE")
-
-
-
-
-
-
-
+```{r, Chunk 15 - Poly plot, include=TRUE, eval= FALSE, warning=FALSE}
 x <- data3$temp_mean_past1h
 y <- data3$efterspørgsel
 data <- data.frame(y, x)
@@ -575,30 +555,28 @@ xlim(5, 31) + ylim(220, 900) +
 
 
 
-```{r}
+```{r, Chunk 16 - Sammenligning af MSE, include=TRUE, eval= FALSE, warning=FALSE}
 
-LOOCV = c("Testmodel", "Testmodel", "Testmodel", "Testmodel", "Træningsmodel", "Træningsmodel", "Træningsmodel", "Træningsmodel")
-Kompleksitet = c("Baseline", "Kompleks", "Mellem", "Simpel","Simpel", "Mellem", "Kompleks", "Baseline")
-MSE_test = c(19376, 7987, 7841, 16993, 16576, 6740)
-
-# Keep strings as characters
-test_frame = data.frame(LOOCV, Kompleksitet, MSE,
+Metode_LOOCV = c("Testmodel", "Testmodel", "Testmodel", "Testmodel",                            "Træningsmodel", "Træningsmodel", "Træningsmodel",                             "Træningsmodel")
+Model_kompleksitet = c("Baseline", "Simpel", "Mellem", "Kompleks","Baseline",                         "Simpel", "Mellem", "Kompleks")
+MSE_Tusinde = c(19.376, 16.993, 7.841, 7.987, 19.635, 16.576, 6.740, 6.923)
+test_frame = data.frame(Metode_LOOCV, Model_Kompleksitet, MSE_Tusinde,
                             stringsAsFactors = TRUE)
-test_frame$Kompleksitet < - factor(test_frame$Kompleksitet,
-                      levels = c("B", "D", "A", "C"))
-str(test_frame)
-levels(test_frame$Kompleksitet)
-attributes(test_frame)
-glimpse(student_frame)
-
-unique(test_frame$Kompleksitet)
-
-ggplot(df_mse) + 
-geom_bar(aes(x=Kompleksitet, y=MSE, fill=LOOCV), 
-stat="identity", # Don't transform the data
+test_frame$Model_Kompleksitet <- factor(test_frame$Model_Kompleksitet,
+                      levels = c("Baseline", "Simpel", "Mellem", "Kompleks"))
+MSE_plot <- ggplot(test_frame) + 
+geom_bar(aes(x = Model_Kompleksitet, y = MSE_Tusinde, fill=Metode_LOOCV), 
+stat = "identity", # Don't transform the data
 position = "dodge") + 
-labs(title = "Sammenligning af trænings og test MSE")
+labs(title = "Træning og test MSE") + 
+ggeasy::easy_center_title()
+MSE_plot
 
+#test_frame
+#str(test_frame)
+#levels(test_frame$Kompleksitet)
+#attributes(test_frame)
+#glimpse(test_frame)
 
 ```
 
