@@ -1,17 +1,18 @@
 \babel@toc {danish}{}\relax 
 \contentsline {section}{Problemfelt}{1}{section*.2}%
 \contentsline {section}{Videnskabsteori og metode}{1}{section*.3}%
-\contentsline {section}{Fra forretningsproblem til datamining problem}{1}{section*.4}%
+\contentsline {section}{Metodevalg}{1}{section*.4}%
 \contentsline {section}{Import}{2}{section*.5}%
 \contentsline {section}{Tidying og transformering af datasæt}{2}{section*.6}%
 \contentsline {section}{Datavisualisering og eksplorativ analyse}{6}{section*.7}%
-\contentsline {section}{Metodevalg}{13}{section*.8}%
-\contentsline {section}{Modeludvælgelse og test på træningsdata}{14}{section*.9}%
-\contentsline {section}{Tidy}{27}{section*.10}%
-\contentsline {section}{Transformer}{28}{section*.11}%
-\contentsline {section}{Visualiser}{29}{section*.12}%
-\contentsline {section}{Model}{30}{section*.13}%
-\contentsline {section}{Kommunikér/analyse}{31}{section*.14}%
-\contentsline {section}{Sessioninformation}{31}{section*.15}%
-\contentsline {section}{Litteratur}{31}{section*.16}%
-\contentsline {section}{Bilag}{31}{section*.17}%
+\contentsline {section}{Træning på træningsdata}{15}{section*.8}%
+\contentsline {section}{Test på testdata}{20}{section*.9}%
+\contentsline {section}{Modeludvælgelse og test på testdata}{21}{section*.10}%
+\contentsline {section}{Tidy}{30}{section*.11}%
+\contentsline {section}{Transformer}{31}{section*.12}%
+\contentsline {section}{Visualiser}{32}{section*.13}%
+\contentsline {section}{Model}{33}{section*.14}%
+\contentsline {section}{Kommunikér/analyse}{34}{section*.15}%
+\contentsline {section}{Sessioninformation}{34}{section*.16}%
+\contentsline {section}{Litteratur}{34}{section*.17}%
+\contentsline {section}{Bilag}{34}{section*.18}%
