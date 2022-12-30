@@ -4,74 +4,111 @@ author: "Af Kenneth Gottfredsen, Eva Rauff og Sanne Sørensen"
 date: "`r Sys.Date()`"
 output:
   pdf_document: 
-    toc: yes
-    df_print: paged
-  word_document:
-    toc: yes
-  html_document:
-    toc: yes
-    df_print: paged
+    toc: no
 subtitle: '1. Semesterprojekt. Antal ord:'
 header-includes:
-- \usepackage{fancyhdr} # Pakke til at justere sidehoved og sidefod.
-- \usepackage{lastpage} # Sidetal i højre side af bundmargen.
 - \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
+- \usepackage[none]{hyphenat} # Fjerner bindestregsord. 
 latex_engine: xelatex # Xelatex er den gamle engine til TNR.
 mainfont: Times New Roman # Times New Roman skrift. 
 fontsize: 12pt # Tekststørrelse. 
 geometry: margin=1in # Justerer margen.
 linestretch: 1.5 # 1.5 linjeafstand. 
 documentclass: report # Dokumenttypen.
-papersize: a4 # a4 side. 
+papersize: a4 # Siderne er i a4format. 
 ---
 
-<!--- Definerer sidehoved og sidefod --->
-
 ```{=tex}
-\fancypagestyle{plain}{%
-\renewcommand{\headrulewidth}{0pt}%
-\fancyhf{}%
-\fancyfoot[R]{\footnotesize Side \thepage\,af\,\pageref*{LastPage}}
-\setlength\footskip{12.75pt}
-}
-```
-<!--- Justerer sidetypen til plain --->
-
-```{=tex}
-\pagestyle{plain}
-\pagestyle{fancy}
 \thispagestyle{empty}
-```
-<!--- Sidetal starter fra nul, istedet for 1 --->
-
-\setcounter{page}{0}
-
-<!--- Laver en ny side efter indholdsfortegnelsen --->
-
-options(scipen = 100)
-
-```{r, Setup, include=FALSE, eval=TRUE}
-knitr::opts_chunk$set(echo = TRUE)
-options(tinytex.verbose = TRUE)
-```
-
+\setcounter{page}{0} 
+\parindent 0ex
 \newpage
+```
+```{r, Setup, include=FALSE, eval=TRUE}
+knitr::opts_chunk$set(echo = TRUE) # Inkluderer sourcekode i output. 
+options(tinytex.verbose = TRUE) #  Printer mere info under rendering.
+options(scipen = 50) # Justerer antallet af decimaler.
+```
 
-## Problemfelt
+# 1 Problemfelt
 
-## Videnskabsteori og metode
+Det har været et godt koldskålsår hos Thise Mejeri (Kjer 2022). Salget af koldskål er nemlig steget med 5%, sammenlignet med det forrige år (ibid). Sommervejret påvirker i stor grad kundernes efterspørgsel på koldskål (Kjer 2022, Jensen 2022, Holland 2022). Men det er vanskeligt at forudsige præcist, hvor meget koldskål Thise skal producere til deres kunder. Hos Thise bruger medarbejderne vejrudsigten og mange års erfaring, når de skal vurdere, hvor mange liter koldskål, der skal produceres fremadrettet (Jensen 2022). I en artikel fra TV Midtvest fortæller adm. direktør Poul Pedersen fra Thise Mejeri at: *"Vi kigger på tal og vejrudsigter som aldrig før. Så beslutter vi os for et tal, og vi plejer at være gode til at gætte." - (Jensen 2022)*. Det er imidlertid et erhvervsøkonomisk problem, hvis man udelukkende bruger vejrudsigten og gætteri til at forudsige, hvor meget koldskål produktionsafdelingen skal producere. Gætteriet indebærer en betydelig risiko, da man ikke kan garantere, at alt koldskålen bliver solgt - selv når vejret er godt! (Jensen 2022).
 
-## Metodevalg
+Konsekvensen kan føre til et stort økonomisk tab, fordi den mængde koldskål som ikke bliver solgt i butikkerne, leveres tilbage til Thises eget lager igen (Holland 2022). Afhænger COOPs efterspørgsel på koldskål kun af vejret? Eller er der andre mekanismer end vejret, som forårsager en stigende eller faldende efterspørgsel på koldskål?
+
+For at løse dette problem bliver undersøgelsens formål derfor at bidrage med en multibel lineær regressionsmodel, som kan give en præcis forudsigelse af, hvor mange liter koldskål COOP vil efterspørge. Den faglige vurdering er, at ovenstående problemstillinger sandsynligvis kan hænge sammen med Thises datamodenshedsproces. Det vil sige deres evne at bruge deres egne data til og skabe større økonomisk vækst i forbindelse med deres produktionsplanlægning.
+
+Produktionsafdelingen hos Thise Mejeri mangler klarhed over, hvordan deres deres egen datamodenhedsproces hænger sammen med COOPs efterspørgsel af koldskål, samt hvilke andre mekanismer der kan have en positiv eller negativ indflydelse. Der findes forskellige teorier på området, som kan forklare sammenhængen. Det er disse teorier og andre vejr-variable, som er emnet for denne undersøgelse, da vi vil forsøge at forstå, hvordan disse hænger sammen med COOPs efterspørgsmål på koldskål, Thises datamodenshedsproces og andre faktorer.
+
+## 1.2 Problemformulering
+
+På baggrund af ovenstående problemfeltet bliver der i næste afsnit formuleret et hovedspørgsmål og nogle underspørgsmål, de skal bruges til at besvare den erhvervsøkonomiske problemstillingen.
+
+## 1.3 Hovedspørgsmål
+
+"Hvordan kan Thises produktionsafdeling forbedre deres datamodenhed og dermed forbedre udnyttelsen af deres egne data til produktionsplanlægning?"
+
+Hovedspørgsmålet er løsningsorienteret. Fordi spørgsmålet skal bidrage med datainitiativer som Thise selv kan benytte i sig af under produktionsplanlægningen. Fordi datainitiativerne vil forbedre deres evne til at bruge data, den selv producerer, til og skabe større økonomisk værdi.
+
+## 1.4 Underspørgsmål 1
+
+"Hvor befinder Thises produktionsafdeling sig på nuværende tidspunkt datamodenhedsmæssigt?" Underspørgsmålet skal skabe større forståelse for, hvor langt i datamodenhedsprocessen Thises produktionsafdeling befinder sig på nuværende tidspunkt.
+
+## 1.5 Underspørgsmål 2
+
+"Hvilke faktorer påvirker COOPs efterspørgsel af koldskål?" Underspørgsmålet skal beskrive hvilke andre variable der hænger sammen med efterspørgslen af koldskål.
+
+## 1.6 Underspørgsmål 3
+
+"Hvilke faktorer kan Thises produktionsafdeling bruge til at forudsige COOPs efterspørgsel af koldskål?" Underspørgsmålet skal analysere de bedste variable som produktionsafdeling skal have med i den endelige model, når de fremadrettet skal forsøge at forudsige Coops efterspørgsel af koldskål.
+
+## 1.7 Underspørgsmål 4
+
+"Kan undersøgelsens resultater anvendes til at styrke produktionsplanlægningen?" Underspørgsmålet skal perspektivere undersøgelsens statistiske analyse til en anden produktionskontekst.
+
+# 2 Videnskabsteori
+
+I dette afsnit vil vi i første omgang argumentere for det videnskabsteoretiske paradigme, vi har valgt. Dernæst vil vi redegøre og bringe begreberne ontologi og epistemologi i spil.\
+
+Et paradigme er et tankesystem (Bergfors 2021). Vores forståelse af sammenhængen mellem Thises datamodenhedsproces, vejrforholdene og efterspørgslen af koldskål er yderst kompleks. Der er behov for to forskellige former for viden om denne problemstilling. Vi har derfor valgt det realistiske paradigme, fordi vi gerne vil skabe større forståelse for, hvad der ligger bag Thises datamodenshedsproces. Vi vil også gerne kunne forklare med tal og dermed beskrive, hvorfor tallene ser ud, som de gør. Dette er, fordi vi antager, at Thises datamodenshedsproces hænger sammen med Coops efterspørgsmål på koldskål samt andre vejr-variables effekter herpå.
+
+Med en realistisk vinkel kan man derfor anvende både kvalitative og kvantitative dataformer. Hvor datapunkter om efterspørgslen af koldskål fx består af tal og datapunkter om datamodenhedsprocessen fx omhandler det menneskelige sprog, holdninger, opfattelser. Vurderingen er, at de to former for data med fordel kan supplere hinanden i projektets analysedel. Ontologi er en antagelse om, hvordan man anskuer den verden, problemstillingen befinder sig i (Bergfors 2021). Den ontologiske opfattelse er, at virkeligheden hos Thise Mejeri eksisterer udenfor eller inden i medarbejdere som arbejder på mejeriet. Men denne virkelighed opfattes som værende uafhængig af, hvordan en medarbejder opfatter verden, hvor sand viden om koldskål og datamodenhed i større grad er objektivt. (Bergfors 2021). Dette paradigme har derfor et større fokus på helheden i form af statistiske lovmæssigheder og repræsentativitet, men konteksten og enkeltdele spiller også en rolle. Havde vi kun fokus på tal, havde vi udelukkende valgt det positivistiske paradigme. Havde vi kun haft fokus på det enkelte menneskes sprog og opfattelser, havde vi valgt et socialkonstruktivistisk paradigme. Hvor verden udelukkende opfattes som værende en subjektiv social konstruktion, og hvor alt er under konstant forandring (ibid).
+
+Epistemologi handler om, hvordan man anskaffer viden om en problemstilling (Bergfors 2021). Som nævnt tidligere vil vi benytte os af kvalitative og kvantitative data i samspil med hinanden, men at statistisk repræsentativitet spiller en større rolle i den her undersøgelse. Vores fokus bliver derfor på at forstå og fortolke, hvorfor tallene fremstår, som de gør, samt hvordan efterspørgslen af koldskål hænger sammen med Thises datamodenshedsproces set ud fra konteksten af produktionsafdelingen.
+
+## 3 Undersøgelsesdesign
+
+Først vil vi argumentere for, hvorfor vi har valgt et casestudie som undersøgelsesdesign. Dernæst vil vi argumentere for metodevalget. Nedenstående figur beskriver vores undersøgelsesdesign.
+
+Et undersøgelsesdesign er en strategisk plan som bruges til at besvare en problemstilling vha. empiriske data (DeVaus 2001, Bergfors 2021). Vi anvender et statisk undersøgelsesdesign til, at besvare vores problemstilling, fordi designets natur i sig selv giver et her - og nu billede. Dertil har vi valgt et casestudie, fordi vores problemstilling tager afsæt i en nutidig kontekst (ibid). Men også fordi vi gerne vil beskrive, forklare og forstå det komplekse samspil, der er mellem Thises datamodenhedsproces, det danske sommervejr og COOPs efterspørgsel påkoldskål (ibid).
+
+## 3.1 Metodologi
+
+Metodologi henviser til de forskellige metoder, man kan bruge til at indsamle data med (ibid). Vi har valgt at anvende eksisterende kvantitative data. Formålet med den kvantitative data er, at den skal bruges i forbindelse med en regressionsanalyse. Fordi vi gerne vil kunne forklare, hvorfor forskellige typer af vejr-variable - samt andre relevante variable påvirker Coops efterspørgsel af koldskål. Vi bruger eksisterende sekundære vejrdata hentet fra Danmarks meteorologiske instituttet (DMI), og produktionsdata om koldskål hentet fra Thises VMI-system. Regressionsanalysen bruges til at forudsige (prædikte) Coops efterspørgsel af koldskål samt andre variables effekt på denne (Se evt. variabelbeskrivelsen under bilag).
+
+Som supplement til de kvantitative data kombineres der med nogle kvalitative data i form af to semistrukturerede interviews med to informanter. Den ene informant arbejder i produktionsafdelingen, og den anden informant arbejder i salgsafdelingen. Formålet med den kvalitative data er, at den kan bruges til og forstå, hvorfor Thises datamodenhedsproces ser ud, som den gør på nuværende tidspunkt. Med den kvalitative data kan vi derfor bevæge os dybere ned i vores problemstilling. Fremgangsmåde kaldes for metodetriangulering, idet vi vil kombinere tre forskellige datakilder til at besvare vores problemstilling med (ibid).
+
+Den metodologiske fremgangsmåde betyder, at vi i større grad har arbejdet induktivt - dvs. hvor vi gik fra det konkrete til det generelle (ibid). Vi startede fx først ud med at lave en interviewguide og nogle spørgsmålsformuleringer, som vi operationaliserede ud fra vores hovedspørgsmål og vores underspørgsmål (se interviewguiden under bilag). Spørgsmålene blev stillet til vores informanter i to semistrukturerede interviews under vores besøg hos Thise Mejeri. Der har også været perioder, hvor vi har arbejdet deduktivt - dvs. hvor vi fik fra det generelle til det konkrete. Fx fandt vi på forhånd ud af nogle teorier om, hvorfor COOPs efterspørgsel på koldskål faldt eller steg. Det viste sig, at fx. at vejret og konkurrenternes pris på koldskål påvirkede efterspørgslen.
 
 Den statistiske metode som anvendes i denne undersøgelse, kaldes for superviseret metode, fordi den tager udgangspunkt i én afhængig variabel. Den konkrete metode er en multibel lineær regression. Den vil vi anvende til og forudsige efterspørgslen på koldskål i liter fremadrettet på baggrund af effekten af nogle uafhængige vejr-variabler. Når vi først har trænet vores model på træningsdata og fået beregnet de nødvendige koefficienter, får alle variablerne i ligningen smidt en hat på toppen - dette indikerer prædiktion (Hastie et.al 2021). Den generelle formel bliver beskrevet nedenunder:
 
 $$
  \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2... + \hat{\beta_p}x_p + \epsilon
-$$ $\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$.\
+$$
 
-$\hat{y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Dog vil det aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl vil altid være til stede (Hastie et.al 2021).
+$\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$. $\hat{Y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Men det vil aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl vil altid være til stede (Hastie et.al 2021).
 
-\newpage
+# 4 Introduktion til dataanalysen og baggrund
+
+Thise har svært at forudsige præcist hvor mange liter koldskål produktionsafdelingen skal producere. Dette har resulteret i, at de ikke har kunne producere nok koldskål i år, fordi flere af butikkerne i området har oplevet at deres kølediske har været tomme for koldskål i sommerperioden. Den kvantitative del af analysen er afgrænset til COOP butikker i nærheden af Landbohøjskolen, hvis beliggenhed er i Københavnområdet. Butikkerne afgiver ordre til Thises fjernlager, hvorefter koldskålen bliver leveret ud til butikkerne.
+
+## Baggrund
+
+Thise har svært at forudsige præcist hvor mange liter koldskål produktionsafdelingen skal producere. Dette har resulteret i, at de ikke har kunne producere nok koldskål i år, fordi flere af butikkerne i området har oplevet at deres kølediske har været tomme for koldskål i sommerperioden. Den kvantitative del af analysen er afgrænset til COOP butikker i nærheden af Landbohøjskolen, hvis beliggenhed er i Københavnområdet. Butikkerne afgiver ordre til Thises fjernlager, hvorefter koldskålen bliver leveret ud til butikkerne.
+
+## Formål
+
+Formålet med analysen er derfor, at udregne en multibel lineær regressionsmodel som bedst kan forudsige butikkernes efterspørgsel på koldskål i området omkring Landbohøjskolen. Derudover vil vi også finde ud af, hvordan vejret og andre vejr-relateret faktorer påvirker butikkernes efterspørgsel på koldskål. Med denne fremgangsmåde kan Thise få løst deres forretningsproblem. Vores datamining problem går ud på, at identificere de forskellige vejr-variablers effekt på efterspørgspørgslen af koldskål.
 
 Først indlæses `pacman::load()`:
 
@@ -86,12 +123,13 @@ pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "RSQLite", "class", "babynames", "nasaweather",
                "fueleconomy", "viridis", "readxl", "timeDate", "tinytex",
                "ggbeeswarm", "palmerpenguins", "hms", "RColorBrewer",
-               "boot", "openxlsx", "writexl", "PerformanceAnalytics", "car", "pscl", "caret")
+               "boot", "openxlsx", "writexl", "PerformanceAnalytics", 
+               "car", "pscl", "caret")
 ```
 
 ## Import
 
-I første omgang vil vi importere datasættet:
+I første omgang importeres datasættet:
 
 ```{r, Chunk 2, include=TRUE, eval= TRUE}
 # Indlæser datasæt og gemmer det nye datasæt i et objekt. 
@@ -102,7 +140,7 @@ str(data1)
 
 ## Tidying og transformering af datasæt
 
-Nu har vi fået indlæst datasættet. Det næste skridt er gøre strukturen i vores dataframe nemmere, at arbejde med og mere læsevenlig. Denne proces kaldes for tidy data, det betyder at hver variabel har en kolonne, hver observation en række, samt hver observationsenhed er i en tabel (Wickham 2022). Dette vil gøre analysearbejdet væsentlig nemmere. Vi starter ud med at rekode nogle af variablerne, så de stemmer overens med hvad der står i opgavebesvarelsen.
+Nu har vi fået indlæst datasættet. Det næste skridt er gøre strukturen i vores dataframe nemmere at arbejde med og mere læsevenlig. Denne proces kaldes for tidy data, det betyder at hver variabel har en kolonne, hver observation en række, samt hver observationsenhed er i en tabel (Wickham 2022). Det gør analysearbejdet nemmere. Først rekode nogle af variablerne, så de stemmer overens med hvad der står i opgavebesvarelsen.
 
 I nedestående kode-chunk rekodes og transformeres de udvalgte variabler så de stemmer overens med eksamensbesvarelsen. Hele kodestumpen vil blive kædet sammen med 'pipe' funktionen' fra dplyr pakken. Omkodningerne bliver til sidst gemt i en ny dataframe som kaldes data1.
 
@@ -112,32 +150,34 @@ I den næste del anvendes mutate igen til, at lave en kolonne der hedder dag, so
 
 Dernæst bruger vi `mutate()` igen til at danne en ny weekend-variabel der hedder weekend_1. I denne sammenhæng vælger vi at fredag, lørdag, søndag og fire andre helligdage er 1, ellers er de andre værdier 0. Dette kaldes for en dummyvariabel.
 
-Måned, dag, kamjunk, forvent_lager og weekend_1 er alle kategoriske faktorer. For at gøre det nemmere at forstå hvad de forskellige værdier udtrykker, navngiver vi disse med `fct_recode()` funktionen.
+Måned, dag, kamjunk, forvent_lager og weekend_1 er alle kategoriske faktorer. For at gøre det nemmere at forstå hvad de forskellige værdier udtrykker, navngives disse med `fct_recode()` funktionen.
 
 ```{r, Chunk 3 - Transformering, include=TRUE, eval= TRUE}
-data1 <- data1 %>%
+data1 <- read_excel("data/stud_exam_data.xlsx") %>%
   mutate(date = ymd(date), måned = factor(month(date)),
-         kamjunk = factor(kammerjunkere), forvent_lager =
-           factor(forventet_l_lager)) %>%
+  kamjunk = factor(kammerjunkere), forvent_lager = 
+  factor(forventet_l_lager)) %>%
   mutate(dag = as.factor(wday(date, week_start =
-                                getOption("lubridate.week.start", 1)))) %>%
+  getOption("lubridate.week.start", 1)))) %>%
   mutate(weekend_1 = as.integer(dag %in% c("5", "6", "7")| date %in%
-                                  ymd("2022-04-14", "2022-04-18", "2022-05-26",
-                                      "2022-06-06"))) %>%
-  mutate(weekend = factor(weekend_1)) %>%
-  mutate(data1, kamjunk = fct_recode(kammerjunkere, "ja" = "0",
-                                     "nej" = "1")) %>%
-  mutate(data1, forvent_lager = fct_recode(forventet_l_lager, "lav" = "1",
-                                           "mellem" = "2", "høj" = "3")) %>%
+  ymd("2022-04-14", "2022-04-18", "2022-05-26","2022-06-06"))) %>%
+  mutate(weekend = factor(weekend_1)) %>% 
+  mutate(data1, kamjunk = fct_recode(kammerjunkere,
+                                      "ja" = "0", 
+                                      "nej" = "1")) %>%
+  mutate(data1, forvent_lager = fct_recode(forventet_l_lager,
+                                      "lav" = "1",
+                                      "mellem" = "2", "høj" = "3")) %>%
   mutate(data1, måned = fct_recode(måned, "april" = "4", "maj" = "5",
-                                   "juni" = "6", "juli" = "7",
-                                   "august" = "8")) %>%
+                                      "juni" = "6", "juli" = "7",
+                                      "august" = "8")) %>%
   mutate(data1, dag = fct_recode(dag, "mandag" = "1", "tirsdag" = "2",
-                                 "onsdag" = "3", "torsdag" = "4",
-                                 "fredag" = "5", "lørdag" = "6",
-                                 "søndag" = "7")) %>%
+                                      "onsdag" = "3", "torsdag" = "4",
+                                      "fredag" = "5", "lørdag" = "6",
+                                      "søndag" = "7")) %>%
   dplyr::select(date, måned, dag, efterspørgsel, kamjunk, forvent_lager,
-                weekend_helligdag = weekend)
+  weekend_helligdag = weekend)
+glimpse(data1)
 ```
 
 I denne kodechunk vil vi lave en HTTP GET-anmodning til en API fra DMI. Vi skal bruge adgangen til at få de relevante vejr-variable som vi senere skal bruge i vores analyse. API'en leverer til slut et objekt i JSON format som bliver transformeret om til en dataframe i stedet for en liste.
@@ -174,11 +214,11 @@ I denne kodechunk vil vi transformere den data vi har hentet fra vores API-kald 
 
 Først bruger vi base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra API´en.
 
-Derefter bruger vi `pivot_wider()`-funktionen til at fordele variablerne ud i deres egne separate kolonner.
+Derefter bruges `pivot_wider()` til at fordele variablerne ud i deres egne separate kolonner.
 
-Vi bruger derefter Mutate-funktionen til at konvertere kolonnen 'målingstidspunkt' til en datoformat Separate-funktionen bruges til at opdele kolonnen 'målingstidspunkt' i to separate kolonner som vi navngiver 'date' og 'time'.
+Vi bruger derefter mutate-funktionen til at konvertere kolonnen målingstidspunkt til datoformat. `Separate()` bruges til at opdele kolonnen målingstidspunkt i to separate kolonner som vi navngiver 'date' og 'time'.
 
-`Filter()`funktionen udvælger rækker, der indeholder de første fire characters: "12:0".
+`Filter(str_sub)`funktionen udvælger rækker, der indeholder de første fire karakterer: "12:0".
 
 ```{r, Chunk 5 - Tidy af vejrdata fra DMI, include=TRUE, eval= TRUE}
 
@@ -198,9 +238,11 @@ data2 <- dplyr::select(data2, features.properties.observed,
   dplyr::select(-(temp_max_past12h:temp_min_past12h))
 ```
 
-I nedestående kode-chunk merger vi data1 og data2 til data3 for at beholde alle observationer i x.
+I nedestående kode-chunk bruges `left_join()` til at returnere alle rækkerne fra x, samt alle kolonner langs x og y (Wickham 2022). Udvalgte dataframes bliver sammenkoblet fra data1 og data2 til data3. Da alle kolonnerne er lige lange, optræder der ingen missing værdier.
 
-Vi bruger derefter mutate til at oprette fire nye variabler i data3 kaldet temp_gt25_3\_dage. `Lag()`-funktionen er brugt til at lave variablerne, som har opfanget forsinkede værdier fra temp1, temp2 og temp3. Afslutningsvis dannes variablen 'temp_gt25_3\_dage', som måler de dage hvor der har været mere end 3 dage i træk med \>= 25 grader. Det er en dummyvariabel fordi vi bruger `if_else`. Da vi har et begrænset antal ord og tegn med mellemrum til rådighed, vil vi ikke lave en udtømmende variabelbeskrivelse. Relevante variabler bliver beskrevet når vi tolker på de forskellige parametre i regressionsanalysen.
+Dernæst anvendes mutate til, at oprette fire nye variabler i data3 kaldet temp_gt25_3\_dage. `Lag()`-funktionen er brugt til at lave variablerne, som har opfanget forsinkede værdier fra temp1, temp2 og temp3.
+
+Afslutningsvis dannes variablen 'temp_gt25_3\_dage', som måler de dage hvor der har været mere end 3 dage i træk med \>= 25 grader. Det er en dummyvariabel fordi der bruges `if_else`. Da vi har et begrænset antal ord og tegn med mellemrum til rådighed, vil vi ikke lave en udtømmende variabelbeskrivelse. Relevante variabler bliver beskrevet når der tolkes på modelparametre i regressionsanalysen.
 
 ```{r, Chunk 6 - Merging af de to datasæt, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -222,15 +264,17 @@ data3 <- data3 %>%
 
 ## Datavisualisering og eksplorativ analyse
 
-Nu er vores data blevet gjort tidy, det næste skridt er at undersøge hvilke vejr-mønstre der hænger sammen med butikkernes efterspørgslen af koldskål i det sammenkoblede datasæt, som vi har kaldt data3. Vi går derfor i gang med den eksplorative del af analysen.
+Nu er data blevet gjort tidy. Næste skridt er at undersøge hvilke vejr-mønstre der hænger sammen med butikkernes efterspørgslen af koldskål i det sammenkoblede datasæt, som vi har kaldt data3. I næste afsnit starter den eksplorative analyse.
 
-Først identificeres potentielle outliers i vores dataset. Derefter fjerner vi 1 outlier som er 47, da den skiller sig væsentligt ud i forhold til de andre observationer. Umiddelbart vurderes det ikke, at der er mange outliers i vores data som kan have indflydelse på den samlede varians, hvorfor vi kun har fjernet den ene. Tilbage er der n = 151 i vores datasæt.
+Først identificeres potentielle outliers i vores dataset. Der fjernes 1 outlier som er 47, fordi den skiller sig væsentligt ud i forhold til de andre observationer. Måske denne er en tastefejl. Umiddelbart vurderes det ikke, at der er mange outliers i data som kan have indflydelse på den samlede varians, hvorfor der kun er fjernet den ene. Tilbage er der n = 151 i data3.
 
 Derefter laves der et ggplot for at se fordelingen af efterspørgselen af koldskål i form af simpelt histogram, fordi efterspørgslen er en kontinuert variabel. Det er derfor muligt, at beregne spredningen mellem observationerne.
 
-`geom_density()` funktionen bruges til, at forstå fordelingen og til at forudsige den forventede fordeling af efterspørgslen på koldskål. Man kan se at at spredningen af observationerne er størst omkring 500. Endvidere kan det ses, at efterspørgslen af koldskål er tilnærmelsesvis normalfordelt, og at sandsynlighedskurven er symmetrisk klokkeformet.
+`geom_density()` funktionen bruges til, at forstå fordelingen og til at forudsige den forventede fordeling af efterspørgslen på koldskål. Man kan se at at spredningen af observationerne er størst omkring 520 liter. Endvidere kan det ses, at efterspørgslen af koldskål er tilnærmelsesvis normalfordelt, og at sandsynlighedskurven er symmetrisk klokkeformet.
 
-Dog kan man også se, at nogle af observationerne falder udenfor, hvilket kan skyldes tilfældig variation eller systematiske fejl. Man ved derfor, at ca. 50% af observationerne befinder sig til venstre og højre af midtpunktet, dette er middelværdien. At vores data er normalfordelt er en fordel, fordi den lineære regressionsmodel er en parametrisk test, hvor kravet er at data er normaltfordelt.
+Dog kan man også se, at nogle af observationerne falder udenfor, hvilket kan skyldes tilfældig variation eller systematiske fejl. Man ved desuden, at ca. 50% af observationerne befinder sig til venstre og højre af midtpunktet, dette er middelværdien.
+
+At data er normalfordelt er en fordel, fordi den lineære regressionsmodel er en parametrisk test, hvor ét af kravene er at data er skal være normaltfordelt. At dette krav er opfyldt gør, at regressionsmodellens parametre er mere pålidelige.
 
 ```{r, Chunk 7 - Histogram over efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -242,11 +286,10 @@ ggplot(data3, aes(x = efterspørgsel)) +
                 fill = "grey", binwidth = 90) +
  geom_density(alpha = 0.5, fill="#FF6666", adjust = 1.6) +
   labs(title = "Histogram over butikkernes efterspørgsel på koldskål i ltr.",
-       subtitle = "Undersøger om efterspørgslen er normaltfordelt",
-       y = "Antal observationer",
-       x = "Butikkernes efterspørgsel af koldskål",
-       caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22") +
-  ggeasy::easy_center_title() + # Centrerer titlen.
+  subtitle = "Undersøger om efterspørgslen er normaltfordelt",
+  y = "Antal observationer",
+  x = "Butikkernes efterspørgsel af koldskål",
+  caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22") +
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14),
          plot.caption = element_text(hjust = 1, face = "italic", size = 10)) +
@@ -254,32 +297,33 @@ ggplot(data3, aes(x = efterspørgsel)) +
 
 ```
 
-I følgende kode-chunk har er der lavet et boxplot til at vise den statistiske variationen ift.butikkens forventede lagerbeholdning og efterspørgslen på koldskål.
+I følgende kode-chunk har er der lavet et boxplot. Det skal vise den statistiske variationen ift. butikkens forventede lagerbeholdning og efterspørgslen på koldskål.
 
-Her kan man se at median-efterspørgslen stiger når man går fra høj til lav forventet lagerbeholdning af koldskål. Dette tyder også på at der er en signifikant sammenhæng mellem de 2 variabler. Man kan også se, at der er fx. ved en høj forventet lagerbeholdning er en relativ stor usikkerhed i forhold til mellem og lav lagerbeholdning, dette indikerer at datapunkterne er en del spredt ud.
+Her kan man se at median-efterspørgslen stiger når man går fra høj til lav forventet lagerbeholdning af koldskål. Dette tyder også på at der er en signifikant sammenhæng mellem de 2 variabler. Man kan også vha. `geom = 'errorbar'` se, at der er fx. ved en høj forventet lagerbeholdning er en relativ stor usikkerhed i forhold til mellem og lav lagerbeholdning, dette indikerer at datapunkterne er forholdsvis meget spredt ud.
 
 ```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel, include=TRUE,eval= TRUE, warning=FALSE}
 
-ggplot(data = data3, mapping = aes(x = forvent_lager, y = efterspørgsel, fill =
-                                     forvent_lager)) +
-  stat_boxplot(geom = 'errorbar') + # Undersøger usikkerheden og spredningen.  
+ggplot(data = data3, mapping = aes(x = forvent_lager, 
+                                   y = efterspørgsel, 
+                                   fill = forvent_lager)) +
+  stat_boxplot(geom = 'errorbar') + # Viser usikkerheden.  
   geom_boxplot() + 
   labs(title = "Lagerbeholdningen og efterspørgsel af koldskål",
-       subtitle = "Variationen ift. den forventede lagerbeholdning og koldskål", 
-       caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-       y = "Butikkernes efterspørgsel på koldskål i ltr.",
-       x = "Butikkens forventede lagerbeholdning") + 
-  geom_beeswarm(dodge.width=3, cex = 1, color = "black") + # undgår overplot.
-  ggeasy::easy_center_title() +
+    subtitle = "Variationen ift. den forventede lagerbeholdning og koldskål", 
+    caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+y = "Butikkernes efterspørgsel på koldskål i ltr.",
+x = "Butikkens forventede lagerbeholdning") + 
+  geom_beeswarm(dodge.width=0, cex = 0.5, color = "black") + 
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 2.4, face = "italic",size = 10 )) +
-  scale_fill_brewer(palette = "Pastel2")
+         plot.caption = element_text(hjust = 1, face = "italic",
+                                     size = 10 )) +
+scale_fill_brewer(palette = "Pastel2")
 ```
 
 I næste kode-chunk er der lavet et boxplot som viser fordelingen af efterspørgslen i forhold til om 25% af butikkerne er løbet tør for kammerjunkere eller ej.
 
-På baggrund af plottet kan man se at hvis butikkerne ikke har kammerjunkere på lageret så falder efterspørgslen. Det betyder at Efterspørgslen på koldskål stiger når de er løbet tør for kammerjunkere.
+På baggrund af plottet kan man se at hvis butikkerne ikke har kammerjunkere på lageret så falder efterspørgslen. Det betyder at Efterspørgslen på koldskål stiger hvis butikkerne er løbet tør for kammerjunkere.
 
 ```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -288,48 +332,48 @@ ggplot(data = data3, mapping = aes(x = kamjunk, y = efterspørgsel, fill =
   stat_boxplot(geom = 'errorbar') + 
   geom_boxplot() + 
   labs(title = "Kammerjunkere og efterspørgsel af koldskål",
-  subtitle = "Den forventede lagerbeholdning af kammerjunker
+  subtitle = "Forventede lagerbeholdning af kammerjunker
   og koldskål",
   caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
   y = "Butikkernes efterspørgsel på koldskål i ltr.",
   x = "Mere end 25% af butikkerne er løbet tør for kammerjunkere") +
-  ggeasy::easy_center_title() + # Centrerer titlen. 
-  geom_beeswarm(dodge.width=3,cex=1, color = "black") + # Justerer boksbredden.
+  geom_beeswarm(dodge.width = 0,cex = 0.5, color = "black") + # Justerer boksbredden.
   theme( plot.title = element_text(hjust = 0.5, size = 16),
          plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 1.7, face = "italic",
+         plot.caption = element_text(hjust = 1, face = "italic",
                                      size = 10 )) +
-  scale_fill_brewer(palette = "Pastel2")
+scale_fill_brewer(palette = "Pastel2")
 ```
 
-Forneden har vi lavet et boxplot som viser sammenhængen mellem måned og efterspørgslen af koldskål. Det er tydeligt at se at median-efterspørgslen stiger fra april-juli hvorefter den falder efterspørgslen i august.
+Forneden er et boxplot som viser sammenhængen mellem måned og efterspørgslen af koldskål. Det er tydeligt at se at median-efterspørgslen stiger fra april-juli hvorefter den efterspørgslen igen falder i august.
 
-Den overordnede observation stemmer også overens med påstande fra vores kilder i problemfeltet, og udsagn fra vores interviews med medarbejderne hos Thise Mejeri. Dette indikerer at efterspørgselen på koldskål hænger moderat sammen med årstiden, dvs. selve sommerperioden.
+Den overordnede observation stemmer også overens med påstande fra vores kilder i problemfeltet, og udsagn fra vores interviews med medarbejderne hos Thise Mejeri. Dette indikerer at efterspørgselen på koldskål hænger moderat sammen med årstiden, dvs. selve sommerperioden, da hver af de forskellige boxplots ikke overlapper hinanden. I næste afsnit undersøges sammenhængen mere dybdegående.
 
 ```{r, Chunk 10 - Boxplot over efterspørgsel og måned, include=TRUE, eval= TRUE, warning=FALSE}
-ggplot(data = data3, mapping = aes(x = måned, y = efterspørgsel,
+ggplot(data = data3, mapping = aes(x = måned, 
+                                   y = efterspørgsel,
                                    fill = måned)) +
   stat_boxplot(geom = 'errorbar') +
   geom_boxplot() + 
   labs(title = "Måned og efterspørgsel af koldskål",
-       subtitle = "Variationen ift. måned og efterspørgelsen af koldskål",
-       caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
-       y = "Butikkernes efterspørgsel på koldskål i ltr.",
-       x = "Måned") +
+  subtitle = "Variationen ift. måned og efterspørgelsen af koldskål",
+  caption = "Kilde: Tal fra DMI 2002. Fra perioden 1/4/22-30/8/22",
+  y = "Butikkernes efterspørgsel på koldskål i ltr.",
+  x = "Måned") +
   ggeasy::easy_center_title() + # Centrerer titlen. 
-  geom_beeswarm(dodge.width = 3,cex = 0.5, color = "black") + # Justerer boksbredden.
-  theme( plot.title = element_text(hjust = 1, size = 16),
-         plot.subtitle = element_text(hjust = 0.5, size = 14), 
-         plot.caption = element_text(hjust = 1.3, face =
+  geom_beeswarm(dodge.width = 0,cex = 0.5, color = "black") + # Justerer boksbredden.
+  theme(plot.title = element_text(hjust = 0.5, size = 16),
+        plot.subtitle = element_text(hjust = 0.5, size = 14), 
+        plot.caption = element_text(hjust = 1, face =
                                        "italic", size = 10 )) +
-  scale_fill_brewer(palette = "Pastel2")
+scale_fill_brewer(palette = "Pastel2")
 ```
 
-I nedestående kodechunk er der udvalgt en række kontinuerte variabler, fordi ønskes er, at undersøge om disse korrelerer med hinanden, og om deres indbyrdes korrelation er statistisk signifikant. Der anvendes en `chart.Correlation()` funktion til, at foretage en korrelationsanalyse.
+I nedestående kodechunk er der udvalgt 6 kontinuerte variabler, fordi ønskes er, at undersøge om disse korrelerer med hinanden, og om deres indbyrdes korrelation er statistisk signifikant. Der anvendes en `chart.Correlation()` til at foretage en korrelationsanalyse.
 
 Efterspørgel og humidity er ikke korreleret med hinanden, og dermed ikke statistisk signifikant. Beslutningen er derfor, at humidity ikke vil blive inkluderet i analysen. Efterspørgsel og den gennemsnitlige temperatur per time har en korrelations koefficient på 0.38. P-værdien er meget lav med tre stjerner, det betyder at sammenhængen er signifikant, og det er derfor usandsynligt at opnå et mere ekstremt resultat, hvis man indsamlede en ny stikprøve igen og igen.
 
-Alle temperatur variablerne er tæt på 1, hvilket betyder at de har stærk samvariation.Dette kaldes for multikolinearitet. Det vil sige, hvis de blev brugt i den endelige model ville det være vanskeligt, at fortolke på koefficienterne. Fordi en Model med høj multikolinearitet bliver mindre præcis og mindre pålidelig.
+Alle temperatur-variablerne er tæt på 1, hvilket betyder at de har stærk samvariation. Dette kaldes for multikolinearitet. Det vil sige, hvis de blev brugt i den endelige model ville det være vanskeligt, at fortolke på koefficienterne. Fordi en Model med høj multikolinearitet bliver mindre præcis og mindre pålidelig. For at reducere multikolineariteten fjernes de øvrige temperatur-variable fra modellen.
 
 ```{r, Chunk 11 - Korrelationsmatrice, include=TRUE, eval= TRUE, warning=FALSE}
 
@@ -342,21 +386,28 @@ cor_matrice <- data3 %>%
 chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 ```
 
-Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits-temperaturen. Derfor har vi valgt at bruge denne variabel som den uafhængige effekt i næste kodechunk. Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits-temperaturen.
+Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits temperaturen. Derfor bruges temp_mean_past1h som den uafhængige effekt i næste kodechunk. Der anvendes `predict()` til at konstruere et 95$%$ prædiktionsinterval, efterfulgt af `geom_smooth()` til og visualisere sammenhængen med et scatterplot.
 
-Efterspørgslen af koldskål bliver prædiktet ud fra den gennemsnitlige temperatur hver time i °C. Først ved 10, 20 og 30 grader. Den grå linje omkring tendenslinjen referer til konfidensintervallet af den gennemsnitlige efterspørgsel på koldskål ved en given temperatur. Mange af observationerne er placeret udenfor dette bånd, hvorfor det er besluttet at anvende et prædiktionsinterval i stedet - der er den røde stiplede linje. Formålet er med andre ord, at indfange usikkerheden omkring de individuelle værdier og ikke usikkerheden omkring gennemsnittet.
+Ud fra scatterplottet kan man se, at forholdet mellem den gennemsnitlige temperatur og butikkernes efterspørgsel på koldskål er moderat lineært. Fordi hældningen på tendenslinjen er positiv. Vi antager at når gennemsnits temperaturen stiger én enhed, vil efterspørgslen stige tilsvarende, da mange af datapunkterne er tæt på linjen. Der anvendes lineær regression, fordi det er en simpel metode, hvor det er nemt og tolke på parametrene.
 
-Når den gennemsnitlige temperatur hver time er 10 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation være 440.64 liter. Ved samme temperatur vil efterspørgslen med 95% sikkerhed være [181.78:699.51].
+Men mange af datapunkterne ligger også langt væk fra tendenslinjes som udtrykker en stigende gennemsnitlig efterspørgsel på koldskål i liter. Dette indikerer at der er stor varians og bias. En mere kompleks model skal derfor anvendes til, at forklare sammenhængen.
 
-Når den gennemsnitlige temperatur hver time er 20 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation være 535.25 liter. Ved samme temperatur vil butikkernes efterspørgslen af koldskål med 95% sikkerhed være [278.23:792.28].
+Efterspørgslen af koldskål bliver prædiktet ud fra den gennemsnitlige temperatur hver time i °C. Først ved 10, 20 og 30 grader. Den grå linje omkring tendenslinjen referer til konfidensintervallet af den gennemsnitlige efterspørgsel på koldskål ved en given temperatur.
 
-Når den gennemsnitlige temperatur hver time er 30 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation være 629.87 liter. Ved samme temperatur vil butikkernes efterspørgslen af koldskål med 95% sikkerhed være [369.30:890.43].
+Mange af observationerne er placeret udenfor dette bånd, hvorfor det er besluttet at anvende et prædiktionsinterval i stedet - der er den røde stiplede linje. Formålet er med andre ord, at indfange usikkerheden omkring de individuelle værdier og ikke usikkerheden omkring gennemsnittet.
 
-Man kan på baggrund af ovenstående tydeligt se, at når den gennemsnitlige temperatur i °C stiger, så stiger butikkernes efterspørgsel på koldskål tilsvarende.
+Når den gennemsnitlige temperatur hver time er 10 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation vil være 440.64 liter. Ved samme temperatur vil efterspørgslen med 95% sikkerhed være [181.78:699.51].
+
+Når den gennemsnitlige temperatur hver time er 20 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation vil være 535.25 liter. Ved samme temperatur vil butikkernes efterspørgslen af koldskål med 95% sikkerhed være [278.23:792.28].
+
+Når den gennemsnitlige temperatur hver time er 30 °C, forudsiger vi at efterspørgslen på koldskål for én ny observation vil være 629.87 liter. Ved samme temperatur vil butikkernes efterspørgslen af koldskål med 95% sikkerhed være [369.30:890.43].
+
+Man kan på baggrund af ovenstående tydeligt se, at hvis den gennemsnitlige temperatur i °C stiger, så stiger butikkernes efterspørgsel på koldskål tilsvarende.
 
 ```{r, Chunk 12 - Scatterplot af temperatur og efterspørgsel, include=TRUE, eval= TRUE, warning=FALSE}
 model1 <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
-predict(model1,data.frame(temp_mean_past1h = (c(10,20,30))), interval = "prediction", level = 0.95)
+predict(model1,data.frame(temp_mean_past1h = (c(10,20,30))), 
+        interval = "prediction", level = 0.95)
 prædiktion <- predict(model1, interval = "prediction", level = 0.95)
 ny_df <- cbind(data3, prædiktion)
 ggplot(ny_df, aes(temp_mean_past1h, efterspørgsel)) +
@@ -366,195 +417,238 @@ ggplot(ny_df, aes(temp_mean_past1h, efterspørgsel)) +
     geom_smooth(method = lm, se = TRUE) +
     labs(title = "Temperatur og efterspørgsel af koldskål",
     caption = "Kilde: tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
-    y = "Butikkernes efterspørgsel på koldskål i ltr",
+    y = "Butikkernes efterspørgsel på koldskål i ltr.",
     x = "Gennemsnitlige temperatur hver time i °C") +
 ggeasy::easy_center_title() + # Centrerer titlen. 
 theme( plot.title = element_text(hjust = 0.5, size = 16),
 plot.subtitle = element_text(hjust = 0.5, size = 10), 
 plot.caption = element_text(hjust = 1, face = "italic", size = 10 )) +
 xlim(4.6, 30.8) + ylim(150, 850)
-warning()
 ```
 
 ## Træning på træningsdata
 
-Da antallet af variabler i det samlede datasæt er mindre end antallet af observationer, benyttes backward-selection til, at udvælge de uafhængige variabler som fremadrettet skal indgå i modellerne. Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage (Hastie et.al 2021).
+I første omgang trændes modellen på træningsdata, fordi vi gerne vil tilpasse modelparametrene. Vi bruger træningsdata til, at fintune vores regressionsmodel. Når modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgsel på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi. MSE måler hvor langt den forudsagte værdi for en observation er fra den faktiske værdi for en observation.
 
-Vi træner først vores model på vores træningsdata, fordi vi gerne vil tilpasse modelparametrene. Vi bruger træningsdata til, at fintune vores regressionsmodel. Når modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgsel på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi. MSE måler hvor langt den forudsagte værdi for en observation er fra den faktiske værdi for en observation. Er MSE lille er der den forudsagte værdi tæt på den faktiske værdi, er MSE stor er den forudsagte værdi langt fra den faktiske værdi. MSE er således et udtryk for, hvor præcis den udvalgte model er til, at forudsige efterspørgslen af koldskål (Hastie et.al 2021).
+Er MSE lille er der den forudsagte værdi tæt på den faktiske værdi, er MSE stor er den forudsagte værdi langt fra den faktiske værdi. MSE er således et udtryk for, hvor præcis den udvalgte model er til, at forudsige efterspørgslen af koldskål (Hastie et.al 2021).
 
-Baseline modellen er den simpleste uden uafhængige variabler. Her er den gennemsnitlige efterspørgsel den afhængige variabel. Baselinemodellen har MSE = $19.376$. Det er meget langt fra 0. Den simple model har en MSE på $16.576$. Den er bedre end baselinemodellen fordi vi har øget kompleksiteten ved, at tilføje temp_mean_past1h.
+Da antallet af variabler i det samlede datasæt er mindre end antallet af observationer bruges backward-selection til, at udvælge de uafhængige variabler som fremadrettet skal indgå i modellerne. Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage (Hastie et.al 2021).
+
+Denne teknik kan hjælpe med at reducere unødvendig varians i den udvalgte model, men på samme tid være effektiv nok til at identificere vigtige relationer i datasættet (ibid).
 
 ```{r, Chunk 13 - Træning, include=TRUE, eval= TRUE, warning=FALSE}
 
 # Baseline model
 
-lm.fit_træning <- lm(efterspørgsel ~ 1, data = data3) # Baseline model
-lm_fit1.1_summary <- summary(lm.fit_træning)
-mean(lm_fit1.1_summary$residuals^2) # MSE 19376.55
+lm.fit_træning <- lm(efterspørgsel ~ 1, data = data3)
+lm_fit_summary <- summary(lm.fit_træning)
+#mean(lm_fit_summary$residuals^2) # MSE 19376.55
 rmse(lm.fit_træning, data = data3)  # RMSE = 139.19
-lm.fit_træning
+#lm_fit1.1_summary
 
 # Simpel model
 
 lm.fit2_træning <- lm(efterspørgsel ~ temp_mean_past1h, data = data3)
 lm_fit2_summary <- summary(lm.fit2_træning)
-mean(lm_fit2_summary$residuals^2) #  MSE = 16576.45
+#mean(lm_fit2_summary$residuals^2) #  MSE = 16576.45
 rmse(lm.fit2_træning, data = data3)  # RMSE = 128.74
-lm_fit2_summary
+#lm_fit2_summary
 
 # Mellem model 
 
-lm.fit3_træning = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + måned + I(temp_mean_past1h), data = data3)
+lm.fit3_træning = lm(efterspørgsel ~ forvent_lager + 
+                       weekend_helligdag + kamjunk + 
+                       temp_gt25_3_dage + måned + 
+                       I(temp_mean_past1h), data = data3)
 lm_fit3_summary <- summary(lm.fit3_træning)
-mean(lm_fit3_summary$residuals^2) # MSE = 6740.342
+#mean(lm_fit3_summary$residuals^2) # MSE = 6740.342
 rmse(lm.fit3_træning, data = data3) # RMSE = 82.09959 
-lm_fit3_summary
+#lm_fit3_summary
 
 # Kompleks model 
 
-lm.fit4_træning = lm(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + måned + I(temp_mean_past1h^22), data = data3)
+lm.fit4_træning = lm(efterspørgsel ~ forvent_lager + 
+                       weekend_helligdag + 
+                       kamjunk + temp_gt25_3_dage + 
+                       måned +
+                       I(temp_mean_past1h^22), data = data3)
 lm_fit4_summary <- summary(lm.fit4_træning)
-mean(lm_fit4_summary$residuals^2) # MSE = 6923.087
+#mean(lm_fit4_summary$residuals^2) # MSE = 6923.087
 rmse(lm.fit4_træning, data = data3) # RMSE = 83.20509
-lm_fit4_summary
+#lm_fit4_summary
 ```
 
 ## Test på testdata
 
 I fornævnte afsnit blev den gennemsnitlige MSE beregnet for hver af de fire modeller på træningsdata. Vi er egentlig ligeglade med disse MSE værdier, det er mere interessant at se hvor præcise forudsigelserne er på testdata. Træningsdata anvendes som førnævnt til, at udvælge signifikante uafhængige variable og tilpasse modelparametrene.
 
-Dog er det værd at nævne, at den data undersøgelsen er baseret på er simuleret. Det vil sige, at $f$ på forhånd er kendt. Den virkelige og yderst komplekse sandhed om efterspørgslen af koldskål ved vi ikke. Men hvis der bliver udtrukket nogle testdata ud fra data3, kan man validere hvor godt modellerne performer på disse testdata, såfremt modelkompleksiteten øges. Kompleksiteten kan øges ved, at de kontinuerte variable opløftes i flere potenser, eller ved og inkludere flere uafhængige variabler i modellerne.
+Dog er det værd at nævne, at den data undersøgelsen er baseret på simulerede data. Dvs. at $f$ er kendt allerede. Den virkelige og komplekse sandhed om efterspørgslen af koldskål vides dog ikke. Men hvis der bliver udtrukket nogle testdata ud fra data3, kan man validere hvor godt en given model performer på disse testdata, hvis modelkompleksiteten øges. Kompleksiteten kan øges ved, at de kontinuerte variable opløftes i flere potenser, eller ved og inkludere flere uafhængige variabler i modellerne.
 
-Man kan producere testdata på flere måder. Der anvendes en LOOCV metode, fordi data3 kun indeholder 151 observationer i alt. Det gode ved denne fremgangsmåde er, at den træner på alle datapunkterne undtagen ét datapunkt. Processen gentages i dette tilfælde 150 gange. Derefter beregnes en gennemsnitlig score er beregnet, denne udtrykker hvor god modellen klare sig (dvs. modellen med lavest MSE vælges) (Hastie et.al 2021).
+## Valg af metode til at teste model performance
 
-Problemet med metoden er, at det kræver stor computerkraft. Det tog denne bærbare computer ca. 2 minutter hver gang koden stumpen blev kørt. Det skyldes, at modellen bliver trænet k gange (ibid).
+Man kan producere testdata på flere måder. Der anvendes i denne forbindelse en LOOCV metode, fordi data3 kun indeholder 151 observationer i alt. Det gode ved denne fremgangsmåde er, at den træner på alle observationerne, undtagen ét datapunkt. Processen gentages i dette tilfælde 150 gange. Derefter beregnes en gennemsnitlig MSE score, som udtrykker hvor god modelpræcisionen er (Hastie et.al 2021).
 
-## Modeludvælgelse og test på testdata
+Problemet med metoden er, at det kræver stor computerkraft. Det tog denne bærbare computer ca. 2 minutter hver gang koden stumpen blev kørt. Det skyldes at modellen bliver trænet k gange (ibid).
 
-+-----------------------+----------------+----------------+----------------+-----------------+
-|                       | Baseline       | Simpel         | Mellem         | Kompleks        |
-+:======================+:==============:+:==============:+:==============:+:===============:+
-| Forvent_lager(mellem) |                |                | $-76.57$\*\*\* | $-74.55$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$19.82$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Forvent_lager(høj)    |                |                | $-82.67$\*\*\* | $-87.00$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$22.58$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Weekend_helligdag(ja) |                |                | $113.01$\*\*\* | $107.33$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$15.00$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Kamjunk(nej)          |                |                | $-71.89$\*\*\* | $-76.52$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$17.50$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Temp_gt25_3\_dage     |                |                | $-82.00$\*     | $-66.74$\*      |
-|                       |                |                |                |                 |
-|                       |                |                | {$34.23$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Måned(maj)            |                |                | $84.37$\*\*\*  | $101.69$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$24.54$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Måned(juni)           |                |                | $129.51$\*\*\* | $162.71$\*\*\*  |
-|                       |                |                |                |                 |
-|                       |                |                | {$32.79$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Måned(juli)           |                |                | $155.95$\*\*\* | $155.947$\*\*\* |
-|                       |                |                |                |                 |
-|                       |                |                | {$32.79$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Måned(august)         |                |                | $85.10$\*      | $197.44$\*      |
-|                       |                |                |                |                 |
-|                       |                |                | {$34.76$}      |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Temp_mean_past1h      |                | $9.46$\*\*\*   | $4.249$\*      | $-0.0$          |
-|                       |                |                |                |                 |
-|                       |                | {$1.89$}       | {$2.07$}       |                 |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Uafhængige variable   | $0$            | $1$            | $6$            | $6$             |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Skæring               | $520.23$\*\*\* | $346.04$\*\*\* | $379.93$\*\*\* | $434.78$\*\*\*  |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Model P-værdi         | $***$          | $***$          | $***$          | $***$           |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| MSE_træning           | $139.20$       | $128.74$       | $82.10$        | $83.21$         |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| MSE_test              | $139.20$       | $130.36$       | $88.55$        | $89.37$         |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| R\^2                  |                | $0.15$         | $0.65$         | $0.64$          |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| RSE                   | $139.7$        | $129.6$        | $85.26$        | $86.41$         |
-+-----------------------+----------------+----------------+----------------+-----------------+
-| Obs                   | $150$          | $150$          | $150$          | $150$           |
-+-----------------------+----------------+----------------+----------------+-----------------+
+## Resultater og tolkning af den multible lineær regression
+
+Med udgangspunkt i tabel 1 tolkes der på modelparametrene.
+
+### Baseline model
+
+### Simpel model
+
+### Mellem model
+
+### Kompleks model
+
++-------------------------+----------------+----------------+----------------+-----------------+
+|                         | Baseline       | Simpel         | Mellem         | Kompleks        |
++:========================+:==============:+:==============:+:==============:+:===============:+
+| Forvent_lager(mellem)   |                |                | $-76.57$\*\*\* | $-74.55$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$19.82$}      | {$19.72$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Forvent_lager(høj)      |                |                | $-82.67$\*\*\* | $-87.00$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$22.58$}      | {$22.81$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Weekend_helligdag(ja)   |                |                | $113.01$\*\*\* | $107.33$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$15.00$}      | {$15.16$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Kamjunk(nej)            |                |                | $-71.89$\*\*\* | $-76.52$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$17.50$}      | {$19.82$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Temp_gt25_3\_dage       |                |                | $-82.00$\*     | $-66.74$\*      |
+|                         |                |                |                |                 |
+|                         |                |                | {$34.23$}      | {$34.90$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Måned(maj)              |                |                | $84.37$\*\*\*  | $101.69$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$24.54$}      | {$23.36$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Måned(juni)             |                |                | $129.51$\*\*\* | $162.71$\*\*\*  |
+|                         |                |                |                |                 |
+|                         |                |                | {$32.79$}      | {$27.87$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Måned(juli)             |                |                | $155.95$\*\*\* | $155.947$\*\*\* |
+|                         |                |                |                |                 |
+|                         |                |                | {$32.79$}      | {$29.12$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Måned(august)           |                |                | $85.10$\*      | $197.44$\*      |
+|                         |                |                |                |                 |
+|                         |                |                | {$34.76$}      | {$30.96$}       |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Temp_mean_past1h        |                | $9.46$\*\*\*   | $4.249$\*      | $0.0$           |
+|                         |                |                |                |                 |
+|                         |                | {$1.89$}       | {$2.07$}       |                 |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Uafhængige variable     | $0$            | $1$            | $5$            | $6$             |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Skæring $\hat{\beta_0}$ | $520.23$\*\*\* | $346.04$\*\*\* | $379.93$\*\*\* | $434.78$\*\*\*  |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Model P-værdi           | $***$          | $***$          | $***$          | $***$           |
++-------------------------+----------------+----------------+----------------+-----------------+
+| MSE_træning             | $139.20$       | $128.74$       | $82.10$        | $83.21$         |
++-------------------------+----------------+----------------+----------------+-----------------+
+| MSE_test                | $139.20$       | $130.36$       | $88.55$        | $89.37$         |
++-------------------------+----------------+----------------+----------------+-----------------+
+| $R^2$                   |                | $0.15$         | $0.65$         | $0.64$          |
++-------------------------+----------------+----------------+----------------+-----------------+
+| Obs.                    | $150$          | $150$          | $150$          | $150$           |
++-------------------------+----------------+----------------+----------------+-----------------+
 
 Tabel 1. Summeret modelreferat fra testdata. Referencegrupper () for faktorerne er: kamjunkja, forvent_lagerlav, månedapril. {} referer til standardfejlen. Note:$* = P < 0.1; ** = P < 0.05; *** = P <0.01$
 
-Vi starter herfra
-
 ```{r, Chunk 14 - Test, include=TRUE, eval= TRUE, warning=FALSE}
+
+ctrl <- trainControl(method = "LOOCV") # Udvælger cross-validation metode
 # Baseline model
 
-lm.fit_træning <- lm(efterspørgsel ~ 1, data = data3) # Baseline model
-lm_fit1.1_summary <- summary(lm.fit_træning)
-mean(lm_fit1.1_summary$residuals^2) # MSE 19376.55
-rmse(lm.fit_træning, data = data3)  # RMSE = 139.19
-lm.fit_træning
+lm.fit_træning <- glm(efterspørgsel ~ 1, data = data3)
+cv.err1 <- cv.glm(data3, lm.fit_træning)
+cv.err1$delta[[1]]
+rmse(lm.fit_træning, data = data3) # 139.1997
+
+#lm.fit_træning <- lm(efterspørgsel ~ 1, data = data3) # Baseline model
+#lm_fit1.1_summary <- summary(lm.fit_træning) # RMSE = 139.19
+#summary(lm.fit_træning)
 
 # Simpel model
 
-ctrl <- trainControl(method = "LOOCV") # Udvælger cross-validation metode
-model1_test <- train(efterspørgsel ~ temp_mean_past1h, data = data3, method = "lm", trControl = ctrl)
+model1_test <- train(efterspørgsel ~ temp_mean_past1h, data = data3, 
+                     method = "lm", trControl = ctrl)
 model1_test # RMSE 130.36
-summary(model1_test)
+#summary(model1_test)
 
 # Mellem model
 
-model2_test <- train(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + måned + temp_mean_past1h, data = data3, method = "lm", trControl = ctrl)
+model2_test <- train(efterspørgsel ~ forvent_lager +
+                       weekend_helligdag + måned +
+                       kamjunk + 
+                       temp_gt25_3_dage + 
+                       I(temp_mean_past1h^1), data = data3,
+                       method = "lm", trControl = ctrl)
 model2_test # RMSE 88.55
 summary(model2_test)
 
 # Kompleks model
 
-model3_test <- train(efterspørgsel ~ forvent_lager + weekend_helligdag + kamjunk + temp_gt25_3_dage + måned + I(temp_mean_past1h^3), data = data3, method = "lm", trControl = ctrl)
-model3_test # RMSE 89.61
+model3_test <- train(efterspørgsel ~ forvent_lager + 
+                       weekend_helligdag +
+                       kamjunk + 
+                       temp_gt25_3_dage + 
+                       måned +
+                       I(temp_mean_past1h^22), data = data3, 
+                       method = "lm", trControl = ctrl)
+model3_test # RMSE 89.37393
 summary(model3_test)
 ```
 
-Med udgangspunkt i ovenstående analyse er følgende model blevet udvalgt ud fra lavest MSE:
-
-På baggrund af vores MSE værdier, har vi som sammenligningsgrundlag opstillet et histogram der visuelt viser, hvordan MSE værdierne bliver mindre i takt med at modelkompleksiteten stiger. MSE er somsagt et udtryk for hvor godt en model yder på træningsdata. Men den MSE der bliver beregnet ud fra træningsdata kan være biased, derfor beregnes der en MSE på testdata vha. LOOCV metoden. Nævn bias variance-tradeoff og tolknings/kompleksitets tradeoff.
-
-```{r, Chunk 15 - Poly plot, include=TRUE, eval= FALSE, warning=FALSE}
+```{r, Chunk 15 - Poly plot, include=TRUE, eval= TRUE, warning=FALSE}
 x <- data3$temp_mean_past1h
 y <- data3$efterspørgsel
 data <- data.frame(y, x)
 
 ggplot(data3, mapping = aes(x=x, y=y)) + 
   geom_point(alpha=1/3) +
-  geom_smooth(method="glm", formula = y ~ poly(x, 1, raw=TRUE), se=FALSE, colour="blue") +
-  geom_smooth(method="glm", formula = y ~ poly(x, 3, raw=TRUE), se=FALSE, colour="green") +
-  geom_smooth(method="glm", formula = y ~ poly(x, 22, raw=TRUE), se=FALSE, colour="red") +
-geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3) + 
+  geom_smooth(method="glm", formula = y ~ poly(x, 1,
+                                               raw=TRUE), 
+                                               se=FALSE, 
+                                               colour="blue") +
+  geom_smooth(method="glm", formula = y ~ poly(x, 3, 
+                                               raw=TRUE), 
+                                               se=FALSE, 
+                                               colour="green") +
+  geom_smooth(method="glm", formula = y ~ poly(x, 22, 
+                                               raw=TRUE), 
+                                               se=FALSE, 
+                                               colour="red") +
+  geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3) + 
   labs(title = "Hældning ved de tre polynomiske regressionsmodeller",
-caption = "Kilde: Tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
+  caption = "Kilde: Tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
 y = "Butikkernes efterspørgsel på koldskål i Ltr.",
 x = "Gennemsnitlige temperatur pr.time i °C.") +
-ggeasy::easy_center_title() + # Centrerer titlen. 
-theme( plot.title = element_text(hjust = 0.5, size = 14),
-plot.subtitle = element_text(hjust = 0.5, size = 14), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
-xlim(5, 31) + ylim(220, 900)
+  ggeasy::easy_center_title() + # Centrerer titlen. 
+  theme( plot.title = element_text(hjust = 0.5, size = 14), 
+  plot.subtitle = element_text(hjust = 0.5, size = 14), 
+  plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))+
+  xlim(5, 31) + ylim(220, 900)
 ```
 
-```{r, Chunk 16 - Histgram over MSE, include=TRUE, eval= FALSE, warning=TRUE}
+### Vurdering af modellens performance
 
-Metode_LOOCV = c("Træningsdata", "Træningsdata", "Træningsdata", "Testdata", "Testdata", "Testdata")
-Model_kompleksitet = c("Simpel", "Mellem", "Kompleks", "Simpel", "Mellem", "Kompleks")
-MSE = c(128.7495, 82.09959, 83.20509, 130.36, 88.55084, 89.37393)
+På baggrund af vores MSE værdier, har vi som sammenlignings grundlag opstillet et histogram der visuelt viser, hvordan MSE værdierne bliver mindre i takt med at modelkompleksiteten stiger.
+
+```{r, Chunk 16 - Histgram over MSE, include=TRUE, eval= TRUE, warning=TRUE}
+
+Metode_LOOCV = c("Træning", "Træning", "Træning", 
+                 "Test", "Test", "Test")
+Model_kompleksitet = c("Simpel", "Mellem", "Kompleks", 
+                       "Simpel", "Mellem", "Kompleks")
+MSE = c(128.7495, 82.09959, 83.20509, 139.1997, 88.55084, 89.37393)
 test_frame = data.frame(Metode_LOOCV, Model_kompleksitet, MSE,
                             stringsAsFactors = TRUE)
 test_frame$Model_kompleksitet <- factor(test_frame$Model_kompleksitet,
@@ -564,15 +658,15 @@ test_frame
 
 
 MSE_plot <- ggplot(test_frame) + 
-geom_bar(aes(x = Model_kompleksitet, y = MSE, fill=Metode_LOOCV), 
-stat = "identity", # Ikke transformer data. 
-position = "dodge") + 
-labs(title = "Træning og test MSE",
-subtitle = "Forskel i MSE ud fra modelkompleksitet") + 
-ggeasy::easy_center_title() + 
-theme( plot.title = element_text(hjust = 0.5, size = 16),
-plot.subtitle = element_text(hjust = 0.5, size = 10), 
-plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
+ geom_bar(aes(x = Model_kompleksitet, y = MSE, fill=Metode_LOOCV), 
+ stat = "identity", # Ikke transformere data. 
+ position = "dodge") + 
+ labs(title = "Træning og test MSE",
+ subtitle = "Forskel i MSE ud fra modelkompleksitet") + 
+ ggeasy::easy_center_title() + 
+ theme( plot.title = element_text(hjust = 0.5, size = 16),
+ plot.subtitle = element_text(hjust = 0.5, size = 10), 
+ plot.caption = element_text(hjust = 1, face = "italic", size = 10 ))
 MSE_plot
 
 #test_frame
@@ -583,32 +677,62 @@ MSE_plot
 
 ```
 
-\newpage
+## Resultater
 
-## Tidy
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
-\newpage
+# Konkurrerende modeller
 
-## Transformer
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
-\newpage
+### Modeludvælgelse
 
-## Visualiser
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
-\newpage
+### Endelig model
 
-## Model
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
-\newpage
+### Overordnet præcision i forudsigelse
 
-## Kommunikér/analyse
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+#### Observeret og prædiktet værdier af målvariablen
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+#### Forbedring i forhold til en baseline model (ingen model)
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+#### Prædiktion med selv-konstruerede forklarende variabler
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+# Diskussion
+
+### Vurdering af modellens performance
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+# Vurdering af bidraget til løsningen af forretningsproblemet
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
+
+# Udrulning af anbefalingerne
+
+<!-- ## Foreslå opfølgningsaktiviteter -->
+
+# Konklusion
+
+Quarto supports executable code blocks within markdown allowing you to create fully reproducible documents and reports. The code required to produce your output is part of the document itself, and is automatically re-run whenever the document is rendered.
 
 ## Sessioninformation
 
-For at højne gennemsnigtigheden printes der en udskrift om den nuværende R session:
+For at højne gennemsigtigheden printes der en udskrift om den nuværende R session:
 
 ```{r, Chunk 20 - Info om nuværnde R session, include=TRUE, eval= TRUE}
-SI <- sessionInfo(package = NULL) # Udskriver en liste om denne R session.  
+sessionInfo(package = NULL) # Udskriver en liste om denne R session.  
 ```
 
 ## Litteratur
