@@ -1,0 +1,103 @@
+---
+title: "Untitled"
+format: pdf
+editor: visual
+fontsize: 14pt # Tekststørrelse. 
+linestretch: 1.5 # 1.5 linjeafstand 
+header-includes: 
+- \usepackage{fancyhdr} # Pakke til at justere sidehoved og sidefod.
+- \usepackage{lastpage} # Sidetal i højre side af bundmargen.
+- \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
+- \usepackage{indentfirst} # Paragrafindentering efter en hovedoverskrift.
+- \usepackage{dcolumn} # Pakke til stargazer. 
+- \usepackage{threeparttable} % Tabelpakke
+- \usepackage{longtable} % Tabelpakke
+---
+```{r Chunk 1 - Pacman setup}
+#| include: TRUE
+#| eval: TRUE
+
+pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
+               "Lahman", "maps", "lubridate", "pryr", "hms", "hexbin",
+               "feather", "htmlwidgets", "broom", "pander", "modelr",
+               "XML", "httr", "jsonlite", "lubridate", "microbenchmark",
+               "splines", "ISLR2", "MASS", "testthat", "leaps", "caret",
+               "RSQLite", "class", "babynames", "nasaweather",
+               "fueleconomy", "viridis", "readxl", "timeDate","tinytex",
+               "ggbeeswarm", "palmerpenguins", "hms", "RColorBrewer",
+               "boot", "openxlsx", "writexl", "PerformanceAnalytics", 
+               "car", "pscl", "caret", "stargazer", "kableExtra")
+```
+
+
+```{r}
+stargazer(data3$kamjunk)
+```
+
+
+
+```{=latex}
+\begin{table}[!htbp] \centering 
+  \caption{Resultater} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{efterspørgsel} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)}\\ 
+\hline \\[-1.8ex] 
+ temp\_mean\_past1h &  & 9.461^{***} &  &  \\ 
+  &  & (1.886) &  &  \\ 
+  & & & & \\ 
+ forvent\_lagermellem &  &  & -76.565^{***} & -74.560^{***} \\ 
+  &  &  & (19.482) & (19.879) \\ 
+  & & & & \\ 
+ forvent\_lagerhøj &  &  & -82.672^{***} & -87.003^{***} \\ 
+  &  &  & (22.579) & (22.790) \\ 
+  & & & & \\ 
+ weekend\_helligdag1 &  &  & 113.010^{***} & 107.331^{***} \\ 
+  &  &  & (15.007) & (15.111) \\ 
+  & & & & \\ 
+ kamjunknej &  &  & -71.890^{***} & -76.524^{***} \\ 
+  &  &  & (17.507) & (17.630) \\ 
+  & & & & \\ 
+ temp\_gt25\_3\_dage &  &  & -81.992^{**} & -66.741^{*} \\ 
+  &  &  & (34.237) & (34.294) \\ 
+  & & & & \\ 
+ månedmaj &  &  & 84.369^{***} & 101.693^{***} \\ 
+  &  &  & (24.541) & (23.257) \\ 
+  & & & & \\ 
+ månedjuni &  &  & 129.512^{***} & 162.718^{***} \\ 
+  &  &  & (30.656) & (26.248) \\ 
+  & & & & \\ 
+ månedjuli &  &  & 155.947^{***} & 197.449^{***} \\ 
+  &  &  & (32.790) & (26.480) \\ 
+  & & & & \\ 
+ månedaugust &  &  & 85.101^{**} & 132.938^{***} \\ 
+  &  &  & (34.768) & (26.591) \\ 
+  & & & & \\ 
+ I(temp\_mean\_past1h) &  &  & 4.249^{**} &  \\ 
+  &  &  & (2.096) &  \\ 
+  & & & & \\ 
+ I(temp\_mean\_past1h$\hat{\mkern6mu}$22) &  &  &  & -0.000 \\ 
+  &  &  &  & (0.000) \\ 
+  & & & & \\ 
+ Constant & 520.225^{***} & 346.035^{***} & 379.923^{***} & 434.785^{***} \\ 
+  & (11.366) & (36.288) & (40.788) & (31.176) \\ 
+  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & \multicolumn{1}{c}{151} & \multicolumn{1}{c}{151} & \multicolumn{1}{c}{151} & \multicolumn{1}{c}{151} \\ 
+R$^{2}$ & \multicolumn{1}{c}{0.000} & \multicolumn{1}{c}{0.145} & \multicolumn{1}{c}{0.652} & \multicolumn{1}{c}{0.643} \\ 
+Adjusted R$^{2}$ & \multicolumn{1}{c}{0.000} & \multicolumn{1}{c}{0.139} & \multicolumn{1}{c}{0.627} & \multicolumn{1}{c}{0.617} \\ 
+Residual Std. Error & \multicolumn{1}{c}{139.663 (df = 150)} & \multicolumn{1}{c}{129.611 (df = 149)} & \multicolumn{1}{c}{85.264 (df = 140)} & \multicolumn{1}{c}{86.412 (df = 140)} \\ 
+F Statistic &  & \multicolumn{1}{c}{25.169$^{***}$ (df = 1; 149)} & \multicolumn{1}{c}{26.246$^{***}$ (df = 10; 140)} & \multicolumn{1}{c}{25.184$^{***}$ (df = 10; 140)} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+```
+
+

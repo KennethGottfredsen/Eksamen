@@ -23,7 +23,7 @@ header-includes:
 - \usepackage{lastpage} # Sidetal i højre side af bundmargen.
 - \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
 - \usepackage{indentfirst} # Paragrafindentering efter en hovedoverskrift. 
-#abstract: "Her kan I skrive et abstract, som ikke bør fylde mere end en halv side. Bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, bla, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa, blaaaa......"
+#abstract: "Her kan I skrive et abstract.
 ---
 
 ```{=tex}
@@ -59,7 +59,7 @@ options(tinytex.verbose = FALSE)  # Printer mere info under rendering.
 
 # Problemfelt
 
-Det har været et godt koldskålsår hos Thise Mejeri (Kjer 2022). Salget af koldskål er nemlig steget med 5%, sammenlignet med det forrige år (ibid). Sommervejret påvirker i stor grad kundernes efterspørgsel på koldskål (Kjer 2022, Jensen 2022, Holland 2022). Men det er vanskeligt at forudsige præcist, hvor meget koldskål Thise skal producere til deres kunder. Hos Thise bruger medarbejderne vejrudsigten og mange års erfaring, når de skal vurdere, hvor mange liter koldskål, der skal produceres fremadrettet (Jensen 2022).
+Det har været et godt koldskålsår hos Thise Mejeri (Kjer 2022). Salget af koldskål er nemlig steget med 5%, sammenlignet med det forrige år (ibid). Sommervejret påvirker i stor grad kundernes efterspørgsel på koldskål (Kjer 2022, Jensen 2022, Holland 2022). Det er vanskeligt at forudsige præcist, hvor meget koldskål Thise skal producere til deres kunder. Hos Thise bruger medarbejderne vejrudsigten og mange års erfaring, når de skal vurdere, hvor mange liter koldskål, der skal produceres fremadrettet (Jensen 2022).
 
 I en artikel fra TV Midtvest fortæller adm. direktør Poul Pedersen fra Thise Mejeri at: *"Vi kigger på tal og vejrudsigter som aldrig før. Så beslutter vi os for et tal, og vi plejer at være gode til at gætte." - (Jensen 2022).* Det er et erhvervsøkonomisk problem, hvis man udelukkende bruger vejrudsigten og gætteri til at forudsige, hvor meget koldskål produktionsafdelingen skal producere. Gætteriet indebærer en betydelig risiko, da man ikke kan garantere, at alt koldskålen bliver solgt - selv når vejret er godt! (Jensen 2022).
 
@@ -119,7 +119,7 @@ Designtypen er et *casestudium*, fordi vores problemstilling tager afsæt i en n
 
 ## Metodologi
 
-Metodologi henviser til de forskellige metoder, man kan bruge til at indsamle data med (ibid). Vi har valgt at anvende eksisterende kvantitative data. Formålet med den kvantitative data er, at den skal bruges i forbindelse med en regressionsanalyse. Fordi vi gerne vil kunne forstå, hvorfor forskellige typer af vejr-variable - samt andre relevante variable påvirker Coops efterspørgsel af koldskål. Vi bruger eksisterende sekundære vejrdata hentet fra Danmarks meteorologiske instituttet (DMI), og produktionsdata om koldskål hentet fra Thises VMI-system. Regressionsanalysen bruges til at forudsige Coops efterspørgsel af koldskål samt andre variables effekt på denne.
+Metodologi henviser til de forskellige metoder, man kan bruge til at indsamle data med (ibid). Vi har valgt at anvende eksisterende kvantitative data. Formålet med den kvantitative data er, at den skal bruges i forbindelse med en regressionsanalyse. Fordi vi gerne vil beskrive forskellige typer af vejr-variable - samt andre relevante variable påvirker Coops efterspørgsel af koldskål. Vi bruger eksisterende sekundære vejrdata hentet fra Danmarks meteorologiske instituttet (DMI), og produktionsdata om koldskål hentet fra Thises VMI-system. Regressionsanalysen bruges til at forudsige Coops efterspørgsel af koldskål samt andre variables effekt på denne.
 
 Som supplement til de kvantitative data kombineres der med nogle kvalitative data i form af to semistrukturerede interviews med to informanter. Den ene informant arbejder i produktionsafdelingen, og den anden informant arbejder i salgsafdelingen. Formålet med den kvalitative data er, at den kan bruges til og forstå, hvorfor Thises datamodenhedsproces ser ud, som den gør på nuværende tidspunkt. Med den kvalitative data kan vi derfor bevæge os dybere ned i vores problemstilling. Fremgangsmåde kaldes for metodetriangulering, idet vi vil kombinere tre forskellige datakilder til at besvare vores problemstilling med (ibid).
 
@@ -159,7 +159,7 @@ Selvom første fase skaber en stor værdi, kan det også skabe en kulturel udfor
 
 Produktionsplanlæggeren har via. Navision adgang til alt virksomhedsdata gennem deres Windows styresystem, hvilket er en on-premises-løsning. Navision er ERP software til at håndtere økonomi data til og træffe beslutninger ud fra. og kan dermed planlægge fremtidig produktionen. At de anvender programmet direkte gennem deres Windows styresystem gør virksomheden sårbar overfor systemnedbrud, hvilket de oplever ca 5 gange om året. Kompetencemæssigt, ifølge Bjarne, har Thise Mejeri en brist da de ikke har ansat nogle medarbejder med relevant analyse erfaring. De er derfor afhængige af den eksterne udbydere til at forecaste med de data, der bliver indsamlet.
 
-# Introduktion til dataanalysen 
+# Introduktion til dataanalysen
 
 Thise har svært at forudsige præcist hvor mange liter koldskål produktionsafdelingen skal producere. Dette har resulteret i, at de ikke har kunne producere nok koldskål i år, fordi flere af butikkerne i området har oplevet at deres kølediske har været tomme for koldskål i sommerperioden.
 
@@ -294,7 +294,7 @@ Vi bruger derefter mutate-funktionen til at konvertere kolonnen målingstidspunk
 `Filter(str_sub)`funktionen udvælger rækker, der indeholder de første fire karakterer: "12:0".
 
 ```{r, Chunk 5 - Tidy af vejrdata fra DMI}
-#| include: TRUE
+#| include: FALSE
 #| eval: TRUE
 data2 <- as.data.frame(do.call(cbind, list_dmi))
 data2 <- dplyr::select(data2, features.properties.observed,
@@ -1010,7 +1010,7 @@ Bilag 3 
 
     **Hvem har adgang til de her data i indsamler, er det mest dig som sidder med de her tal og informationer og laver nogle rapporter, eller er det noget som den menige medarbejder har adgang til og bruger?** 
 
-    "Når jeg laver de her rapporter, sætter jeg det ind i Navision og så hiver produktionsplanlæggeren dem ud af Navision for at lave en produktionsplan ud fra det. " 
+    "Når jeg laver de her rapporter, sætter jeg det ind i Navision og så hiver produktionsplanlæggeren dem ud af Navision for at lave en produktionsplan ud fra det." 
 
     **Er det alle medarbejdere i produktionen som så har adgang til det?** 
 
@@ -1056,13 +1056,13 @@ Bilag 3 
 
     **Hvad er konsekvenserne af forecast hvis det ikke rammer plet, og hvor store kan de være?** 
 
-    "Jamen hvis forecastet ikke er rigtigt, så har vi pludselig ikke den vare som kunden efterspørger. Det er så mistet salg, (hmm) det er svært at svare på hvor ofte det så sker. Det sker ind imellem. Det sker nogle gange at de (Coop) kører nogle kampagner hvor vi ikke er blevet ordentligt oplyst. Fx for nyligt havde vi en fragt til Tyskland, hvor Coop ikke havde meldt ud at de havde tilbudt vores smør, så trækker de pludselig en rigtig stor del smør, det var vi ikke forberedte på da vi ikke havde produceret til dette, og smør tager typisk 4-5 dage før man kan ændre noget. Så når de trækker en stor mængde, så har vi en 2-3 dage hvor vi ikke kan levere til de andre Coop butikker. Så hvis vi ikke er forbedret, og Coop ikke har fortalt os at de har/vil køre en kampagne, så kommer vi til at underlevere, da det tager tid at producere. Mælk er dag til dag, men syrnet produkter er ofte 2-3 dage. " 
+    "Jamen hvis forecastet ikke er rigtigt, så har vi pludselig ikke den vare som kunden efterspørger. Det er så mistet salg, (hmm) det er svært at svare på hvor ofte det så sker. Det sker ind imellem. Det sker nogle gange at de (Coop) kører nogle kampagner hvor vi ikke er blevet ordentligt oplyst. Fx for nyligt havde vi en fragt til Tyskland, hvor Coop ikke havde meldt ud at de havde tilbudt vores smør, så trækker de pludselig en rigtig stor del smør, det var vi ikke forberedte på da vi ikke havde produceret til dette, og smør tager typisk 4-5 dage før man kan ændre noget. Så når de trækker en stor mængde, så har vi en 2-3 dage hvor vi ikke kan levere til de andre Coop butikker. Så hvis vi ikke er forbedret, og Coop ikke har fortalt os at de har/vil køre en kampagne, så kommer vi til at underlevere, da det tager tid at producere. Mælk er dag til dag, men syrnet produkter er ofte 2-3 dage." 
 
     **Hvordan monitorerer i salget, fx hos Coop, om salget hos Coop går godt eller om det går skidt?** 
 
     "Jamen vi kigger på serviceegrad. Salget sidder jeg ikke så meget med, jeg sidder ikke med salgstal men jeg sidder med mængderne. Vi kigger hver dag på servicetallene, for at se hvordan vi har preformet ud til Coop, vi har en målsætning om at levere 98,5% på servicegraden til alle vores kunder." 
 
-    "Det er snart 1,5-2 år siden vi startede med Perito forecasting system, og vi lærer stadig rigtig meget, og det gør de også. Det er en proces. I starten havde de ikke så mange historiske salg. Når man fx kører en kampagne så er der typisk en top i denne hvor det går bedst, og denne top ville jo så ikke skulle bruges næste år for at lave en forecast, man skal altså have fjernet denne "unaturlige" top som er skabt ud fra kampagnen. Vi er blevet bedre og bedre til at forecaste. " 
+    "Det er snart 1,5-2 år siden vi startede med Perito forecasting system, og vi lærer stadig rigtig meget, og det gør de også. Det er en proces. I starten havde de ikke så mange historiske salg. Når man fx kører en kampagne så er der typisk en top i denne hvor det går bedst, og denne top ville jo så ikke skulle bruges næste år for at lave en forecast, man skal altså have fjernet denne"unaturlige" top som er skabt ud fra kampagnen. Vi er blevet bedre og bedre til at forecaste. " 
 
     **Hvad synes du selv, at det kunne være rart at have?** 
 
