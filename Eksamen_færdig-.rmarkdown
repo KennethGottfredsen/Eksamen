@@ -6,7 +6,7 @@ author: "Kenneth Gottfredsen, Eva Rauff og Sanne Sørensen"
 format: 
   pdf:
    code-line-numbers: true
-   toc: FALSE
+   toc: TRUE
    toc-title: Indholdsfortegnelse
    toc-depth: 4
    number-sections: true
@@ -21,7 +21,7 @@ fontsize: 12pt # Tekststørrelse.
 #linestretch: 1.5 # 1.5 linjeafstand 
 header-includes: 
 - \usepackage[danish]{babel} # Alle overskrifter er på Dansk.
-- \usepackage{indentfirst} # Paragrafindentering efter en hovedoverskrift.
+# - \usepackage{indentfirst} # Paragrafindentering efter en hovedoverskrift.
 - \usepackage{dcolumn} # Pakke til stargazer. 
 - \usepackage{threeparttable} # Tabelpakke
 - \usepackage{longtable} # Tabelpakke
@@ -33,9 +33,11 @@ header-includes:
 \newpage
 \emergencystretch 3em
 ```
+
 ```{r, Setup, include=FALSE, eval=TRUE}
 options(scipen = 100) # Justerer antallet af decimaler.
 ```
+
 
 # Problemfelt
 
@@ -49,31 +51,21 @@ På baggrund af ovenstående problemfelt bliver der i næste afsnit formuleret e
 
 *"Hvordan kan Thises produktionsafdeling forbedre deres datamodenhed og dermed forbedre udnyttelsen af deres egne data til produktionsplanlægning?"*
 
-Hovedspørgsmålet er *løsningsorienteret*. Fordi spørgsmålet skal bidrage med datainitiativer som Thise selv kan benytte i sig af under produktionsplanlægningen. Fordi datainitiativerne vil forbedre deres evne til at bruge data, den selv producerer, til og skabe større økonomisk værdi.
-
 ### Underspørgsmål 1
 
 *"Hvor befinder Thises produktionsafdeling sig på nuværende tidspunkt datamodenhedsmæssigt?"*
-
-Formålet med spørgsmålet er, at *beskrive* hvor langt i datamodenhedsprocessen Thises produktionsafdeling befinder sig på nuværende tidspunkt.
 
 ### Underspørgsmål 2
 
 *"Hvilke faktorer påvirker COOPs efterspørgsel af koldskål?"*
 
-Formålet med spørgsmålet er, at *beskrive* hvilke variable der hænger sammen med COOPs efterspørgslen på koldskål.
-
 ### Underspørgsmål 3
 
 *"Hvilken model kan Thises produktionsafdeling bruge til at forudsige COOPs efterspørgsel af koldskål fremadrettet?"*
 
-Formålet med spørgsmålet er, at *identificere* den bedste regressionsmodel og de variable som produktionsafdeling skal bruge, når de skal forsøge at forudsige Coops efterspørgsel af koldskål.
-
 ### Underspørgsmål 4
 
 *"Kan undersøgelsens resultater anvendes til at styrke produktionsplanlægningen?"*
-
-Formålet med spørgsmålet er, at *perspektivere* undersøgelsens statistiske analyse til en anden produktionskontekst.
 
 # Videnskabsteori
 
@@ -90,14 +82,6 @@ Designtypen er et *casestudium*, fordi vores problemstilling tager afsæt i en n
 ## Metodologi
 
 *Metodologi* henviser til de forskellige metoder, man kan bruge til at indsamle data med (ibid). Der anvendes eksisterende kvantitative data til en regressionsanalyse. Denne data skal skabe større forståelse for, hvorfor forskellige vejr-variable påvirker Coops efterspørgsel af koldskål. Der bruges eksisterende sekundære vejrdata hentet med en API fra Danmarks meteorologiske instituttet (DMI), og produktionsdata om koldskål hentet fra Thises VMI-system. Som supplement til de kvantitative data kombineres der med nogle kvalitative data i form af to semistrukturerede interviews med to informanter. Den ene informant arbejder i produktionsafdelingen, og den anden arbejder i salgsafdelingen. Formålet med den kvalitative data er, at disse dybdegående oplysninger kan bruges til og forstå datamodenhed ud fra et subjektivt medarbejderperspektiv.
-
-Den statistiske metode som anvendes i denne undersøgelse kaldes for superviseret metode, fordi den tager udgangspunkt i en afhængig variabel. Den specifikke metode er en *multibel lineær regression*. Den bruges til at forudsige efterspørgslen på koldskål i liter ud fra effekten af flere uafhængige vejr-variabler. Dette betegnes som prædiktion (Hastie et.al 2021). Den generelle formel er:
-
-$$
- \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2... + \hat{\beta_p}x_p + \epsilon
-$$
-
-$\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$. $\hat{Y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Men det vil aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl (Hastie et.al 2021).
 
 # Thises forretningsmodel
 
@@ -129,6 +113,7 @@ Den kvantitative del af analysen er afgrænset til COOP butikker i nærheden af 
 
 Formålet med analysen er derfor, at udregne en multibel lineær regressionsmodel som bedst kan forudsige butikkernes efterspørgsel på koldskål i området omkring Landbohøjskolen. Derudover vil vi også finde ud af, hvordan vejret og andre vejr-relateret faktorer påvirker butikkernes efterspørgsel på koldskål. Tilgangen kan løse Thises forretningsproblem. Undersøgelsens dataminingproblem går ud på, at identificere de forskellige vejr-variablers effekt på efterspørgspørgslen af koldskål.
 
+
 ```{r Chunk 1 - Pacman setup}
 #| include: FALSE
 #| eval: TRUE
@@ -145,9 +130,11 @@ pacman::p_load("tidyverse", "magrittr", "nycflights13", "gapminder",
                "car", "pscl", "caret", "stargazer", "kableExtra")
 ```
 
+
 ## Importer data til R
 
 Først importeres datasættet ind i R-Studio:
+
 
 ```{r, Chunk 2 - Dataimport}
 #| include: FALSE
@@ -158,9 +145,11 @@ data1 <- read_excel("data/stud_exam_data.xlsx")
 #str(data1) # Undersøger strukturen i data1. 
 ```
 
+
 ## Tidying og transformering af datasæt
 
 Nu har vi fået indlæst datasættet. Det næste skridt er gøre strukturen i vores dataframe nemmere at arbejde med og mere læsevenlig. Processen kaldes for tidy data, det betyder at hver variabel har en kolonne, hver observation en række, samt hver observationsenhed er i en tabel (Wickham 2022). Det gør analysearbejdet nemmere. Først rekodes nogle af variablerne, så de stemmer overens med hvad der står i opgavebesvarelsen.
+
 
 ```{r, Chunk 3 - Transformering af variabler}
 #| include: FALSE
@@ -194,7 +183,9 @@ data1 <- read_excel("data/stud_exam_data.xlsx") %>%
 
 ```
 
+
 For at indhente data fra DMI laves en HTTP GET-anmodning til en API fra DMI. Vi skal bruge adgangen til at få de relevante vejr-variable som vi senere skal bruge i vores analyse. API'en leverer til slut et objekt i JSON format som bliver transformeret om til en dataframe i stedet for en liste. Først bruges base_url og info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra API´en.
+
 
 ```{r, Chunk 4 - Vejrdata fra DMI}
 #| include: FALSE
@@ -225,7 +216,9 @@ list_dmi <- api_JSON
 data2 <- as.data.frame(do.call(cbind, list_dmi))
 ```
 
+
 I næste kodechunk vil vi transformere den data vi har hentet fra vores API-kald til nogle mere brugbare data. Først bruges base_url og dernæst info_url til at anmode om vejrdata fra DMI's API. req_url bruges til at udvælge specifikke parametre fra API´en. Derefter bruges `pivot_wider()` til at fordele variablerne ud i deres egne separate kolonner. mutate-funktionen bruges til at konvertere kolonnen målingstidspunkt til datoformat. `Separate()` bruges til at opdele kolonnen målingstidspunkt i to separate kolonner som navngives 'date' og 'time'. `Filter(str_sub)`funktionen udvælger rækker, der indeholder de første fire karakterer: "12:0".
+
 
 ```{r, Chunk 5 - Tidy af vejrdata fra DMI}
 #| include: FALSE
@@ -246,7 +239,9 @@ data2 <- dplyr::select(data2, features.properties.observed,
   dplyr::select(-(temp_max_past12h:temp_min_past12h))
 ```
 
+
 I nedestående kode-chunk bruges `left_join()` til at returnere alle rækkerne fra x, samt alle kolonner langs x og y (Wickham 2022). Udvalgte dataframes sammenkobles fra data1 og data2 til data3. Da alle kolonnerne er lige lange, er der ingen missing værdier. Dernæst anvendes mutate til, at oprette fire nye variabler i data3 kaldet temp_gt25_3\_dage. `Lag()` er brugt til at lave variablerne, som har opfanget forsinkede værdier fra temp1, temp2 og temp3. Afslutningsvis dannes variablen 'temp_gt25_3\_dage', som måler de dage hvor der har været mere end 3 dage i træk med \>= 25 grader. Det er en dummyvariabel fordi der bruges `if_else`. Relevante variabler bliver beskrevet når der tolkes på modelparametre i regressionsanalysen.
+
 
 ```{r, Chunk 6 - Merging af de to datasæt}
 #| include: FALSE
@@ -266,9 +261,11 @@ data3 <- data3 %>%
          temp_gt25_3_dage = if_else(temp1 >= 25 & temp2 >= 25 & temp3 >= 25, 1, 0))
 ```
 
+
 ## Datavisualisering og eksplorativ analyse
 
 Nu er data blevet gjort tidy. Næste skridt er at undersøge hvilke faktorer der kan hænge sammen med butikkernes efterspørgslen af koldskål. I afsnittet begynder den eksplorative analyse. `geom_density()` funktionen bruges til, at forstå fordelingen og til at forudsige den forventede fordeling af efterspørgslen på koldskål. Man kan se at at spredningen af observationerne er størst omkring 520 liter, dette er gennemsnittet. Observationerne er normalfordelte. At de er normalfordelt er en fordel, fordi den lineære regressionsmodel er en parametrisk test, hvor ét af kravene er data skal være normaltfordelt (Hastie et.al 2021). At kravet er opfyldt gør model-parametrene er mere pålidelige.
+
 
 ```{r, Chunk 7 - Histogram over efterspørgsel}
 #| include: FALSE
@@ -293,7 +290,9 @@ ggplot(data3, aes(x = efterspørgsel)) +
 
 ```
 
+
 I følgende kode-chunk er der vist et boxplot. Det skal vise den statistiske variationen ift. butikkens forventede lagerbeholdning og efterspørgslen på koldskål. Man kan se at median-efterspørgslen stiger når fra høj til lav forventet lagerbeholdning af koldskål. Det tyder på at der er en signifikant sammenhæng mellem de 2 variabler.
+
 
 ```{r, Chunk 8 - Boxplot over lagerbeholdning og efterspørgsel}
 #| include: FALSE
@@ -318,7 +317,9 @@ scale_fill_brewer(palette = "Pastel2")
 
 ```
 
+
 I næste kode-chunk er der lavet et boxplot som viser fordelingen af efterspørgslen i forhold til om 25% af butikkerne er løbet tør for kammerjunkere eller ej. På baggrund af plottet kan man se at hvis butikkerne ikke har kammerjunkere på lageret så falder efterspørgslen. Det betyder efterspørgslen på koldskål stiger hvis butikkerne er løbet tør for kammerjunkere.
+
 
 ```{r, Chunk 9 - Boxplot over efterspørgsel og kammerjunkere}
 #| include: FALSE
@@ -342,7 +343,9 @@ scale_fill_brewer(palette = "Pastel2")
 
 ```
 
+
 Forneden er et boxplot som viser sammenhængen mellem måned og efterspørgslen af koldskål. Det er tydeligt at se at median-efterspørgslen stiger fra april-juli hvorefter den efterspørgslen igen falder i august.
+
 
 ```{r, Chunk 10 - Boxplot over efterspørgsel og måned}
 #| include: FALSE
@@ -368,9 +371,11 @@ scale_fill_brewer(palette = "Pastel2")
 
 ```
 
+
 I nedestående kodechunk er der udvalgt 6 kontinuerte vejr-variabler, fordi ønskes er, at undersøge om disse er korreleret med hinanden, og om deres indbyrdes korrelation er statistisk signifikant. Der anvendes en `chart.Correlation()` til at foretage en korrelationsanalyse.
 
 Efterspørgel og humidity er ikke korreleret med hinanden, og dermed ikke statistisk signifikant. Beslutningen er derfor, at humidity ikke vil blive inkluderet i analysen. Efterspørgsel og den gennemsnitlige temperatur per time har en moderat korrelations koefficient på 0.38. P-værdien er meget lav med tre stjerner, det betyder at sammenhængen er signifikant, og det er derfor usandsynligt at opnå et mere ekstremt resultat, hvis man foretog en ny undersøgelse. Mindre end $5\%$ af korrelationen skyldes derfor tilfældighed. Alle temperatur-variablerne er tæt på 1, hvilket betyder at de har stærk samvariation. Dette kaldes for multikolinearitet. Det vil sige, hvis de blev brugt i den endelige model ville det være vanskeligt, at fortolke på koefficienterne. En Model med høj multikolinearitet bliver mindre præcis og mindre pålidelig. For at reducere multikolineariteten fjernes de øvrige temperatur-variable.
+
 
 ```{r, Chunk 11 - Korrelationsmatrice}
 #| include: FALSE
@@ -389,6 +394,7 @@ chart.Correlation(cor_matrice, histogram = TRUE, method = "pearson")
 #stargazer(correlation.matrix, title = "Correlation Matrix")
 ```
 
+
 Som førnævnt var der en moderat signifikant sammenhæng mellem efterspørgslen og gennemsnits temperaturen. Derfor bruges temp_mean_past1h som den uafhængige effekt i næste kodechunk. Der anvendes `predict()` til at konstruere et 95$%$ prædiktionsinterval, efterfulgt af `geom_smooth()` til og visualisere sammenhængen med et scatterplot.
 
 Ud fra scatterplottet kan man se, at forholdet mellem den gennemsnitlige temperatur og butikkernes efterspørgsel på koldskål er moderat lineært. Fordi hældningen på tendenslinjen er positiv. Det antages at når gennemsnits temperaturen stiger én enhed, vil efterspørgslen stige tilsvarende, det 'forholdsvis' mange af datapunkterne er placeret omkring tendenslinjen. Der anvendes lineær regression, fordi det er en simpel metode, Og det er nemt at tolke på model-parametrene.
@@ -396,6 +402,7 @@ Ud fra scatterplottet kan man se, at forholdet mellem den gennemsnitlige tempera
 Mange af datapunkterne ligger også langt væk fra tendenslinjen, der udtrykker en stigende gennemsnitlig efterspørgsel på koldskål i liter. Det indikerer at der er stor varians og potentiel bias tilstede. En mere kompleks model kan derfor anvendes til, at forklare sammenhængen. Flere af observationerne er placeret udenfor dette bånd, hvorfor det er besluttet at anvende et prædiktionsinterval i stedet - der er den røde stiplede linje. Formålet er med andre ord, at medregne usikkerheden omkring de individuelle værdier og ikke usikkerheden omkring gennemsnittet.
 
 Når den gennemsnitlige temperatur hver time er 30 °C, er efterspørgslen på koldskål for én ny observation 629.87 liter. Ved samme temperatur vil butikkernes efterspørgslen af koldskål med 95% sikkerhed være \[369.30:890.43\]. Man kan på baggrund af nedestående output tydeligt se, at hvis den gennemsnitlige temperatur i °C stiger, stiger butikkernes efterspørgsel på koldskål tilsvarende.
+
 
 ```{r, Chunk 12 - Scatterplot af temperatur og efterspørgsel}
 #| include: FALSE
@@ -424,11 +431,13 @@ xlim(4.6, 30.8) + ylim(150, 850)
 
 ```
 
+
 ## Træning på træningsdata
 
 først trænes modellen på træningsdata, fordi vi gerne vil tilpasse modelparametrene. Der anvendes træningsdata til, at fintune vores regressionsmodel. Efter modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da man gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgsel på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi. MSE måler hvor langt den forudsagte værdi for en observation er fra den faktiske værdi for en observation. Er MSE lille er der den forudsagte værdi tæt på den faktiske værdi, er MSE stor er den forudsagte værdi langt fra den faktiske værdi. MSE er således et udtryk for, hvor præcis den udvalgte model er til, at forudsige efterspørgslen af koldskål (Hastie et.al 2021). MSE skal være så tæt på $0$ som muligt.
 
 Antallet af variabler i det samlede datasæt er mindre end antallet af observationer. Derfor bruges backward-selection til, at udvælge de uafhængige variabler som fremadrettet skal indgå i modellerne. Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage (Hastie et.al 2021). Denne teknik kan hjælpe med at reducere unødvendig varians i den udvalgte model. men på samme tid er den effektiv til, at identificere vigtige relationer i datasættet (ibid).
+
 
 ```{r, Chunk 13 - Træning}
 #| include: FALSE
@@ -475,6 +484,7 @@ rmse(lm.fit3_træning, data = data3) # RMSE = 83.20509
 
 ```
 
+
 ## Test på testdata
 
 I det foregående afsnit blev den gennemsnitlige MSE beregnet for hver af de fire modeller på træningsdata. Vi er egentlig ligeglade med disse MSE værdier. Det er mere interessant at se hvor præcise forudsigelserne er på testdata. Træningsdata anvendes som førnævnt til, at udvælge signifikante uafhængige variable og tilpasse modelparametrene.
@@ -486,6 +496,7 @@ Dog er det værd at nævne, at den data undersøgelsen er baseret på simulerede
 Man kan producere testdata på flere måder. Der anvendes en *LOOCV* metode, fordi data3 kun indeholder 151 observationer i alt. Fordelen ved fremgangsmåden er, at den træner på alle observationerne, undtagen ét datapunkt. Processen gentages i dette tilfælde 150 gange. Derefter beregnes en gennemsnitlig MSE score, som udtrykker hvor god modelpræcisionen er (Hastie et.al 2021).
 
 Problemet med metoden er, at det kræver stor computerkraft, det er fordi modellen trænes k gange (ibid).
+
 
 ```{r, Chunk 14 - Test}
 #| include: FALSE
@@ -535,6 +546,7 @@ model3_test <- summary(model3_test)
 model3_test # Printer alle modelparametre.
 ```
 
+
 # Resultater
 
 Nu er de fire modeller blevet trænet på træningsdata og testet godt igennem på testdata. Resultaterne tager kun udgangspunkt i koefficienterne fra de fire testmodeller. Modellen med den laveste kvadrerede RMSE, og den højeste $R^2$ er den model som har størst prædiktiv præcision.
@@ -566,6 +578,8 @@ Det kan være en indikation på, at forbrugerne bliver trætte af at spise kolds
 -   Stiger den gennemsnitlige temperatur målt pr. time med én °C, stiger butikkernes efterspørgsel på koldskål i gennemsnit med $4.25$ ltr.
 
 Øget sommervarme hænger moderat sammen med butikkernes efterspørgsel på koldskål. Det stemmer overens med eksisterende viden på området (Kjer 2022).
+
+\newpage
 
 +----------------------------+---------------+---------------+---------------+----------------+
 |                            | **Baseline**  | **Simpel**    | **Moderat**   | **Kompleks**   |
@@ -639,6 +653,11 @@ Forskellen i trænings- og test RMSE er jvf. histogrammet ikke ens når kompleks
 
 For det første hænger det optimale modeldevalg også sammen med præcision i forudsigelse og fortolkningen af parametrene. Stiger fleksibiliteten bliver det svære at tolke på parametrene. Falder falder fleksibiliteten bliver det nemmere at tolke på parametrene. Da Temp_mean_past1h blev opløftet til Temp_mean_past1h\^22 i den komplekse model, blev p værdien for $\hat{\beta_1}$ for Temp_mean_past1h\^22 insignifikant ved $Pr = 0.58\%$. $\hat{\beta_1}$ er derfor ikke tilstrækkelig langt fra $0$. Dette gjorde det vanskeligere at tolke på denne paramter. Det var fordi modellen opfangede for mange fejl og for meget støj i form af bias.
 
+For det andet hænger modelvalget sammen det bias/variance tradeoff som forekommer, hvis man øger modelkompleksiteten i jagten på identificere den model som har lavest varians og bias. Varians er ændringen i $\hat{f}$, når den beregnes på nye data - men værdien er aldrig helt den samme! Stiger fleksibiliteten øges variansen. Bias opstår når man forsøger, at forudsige et komplekst fænomen med en for simpel metode. Stiger fleksibiliteten reduceres bias. Efterspørgslen på koldskål er som førnævnt et multidimensionelt fænomen.
+
+Vi forsøgte at reducere bias ved og udvide den simple lineære model med Temp_mean_past1h uden alle de kategoriske faktorvariabler, da de ikke kan indgå i en polynomisk regression. Det resulterede ikke i en forbedring i RMSE, eller en stigning i $R^2$. Hverken da den blev opløftet i 3 og 22 potens. Valget blev derfor, at beholde faktorerne i den moderate model, fordi de til sammen forklarer $63\%$ af den samlede varians. Andre variable kunne havde indflydelse på butikkernes efterspørgsel på koldskål. Gennemsnitlige antal solskinstimer, maksimale vindhastighed, samt de private forbrugers socioøkonomiske forhold kunne bidrage med flere dimensioner til den moderate model. Beslutningen blev derfor, at vælge den multible lineære model med moderat kompleksitet. I næste kapitel udrulles anbefalingerne.
+
+
 ```{r, Chunk 16 - Histgram over MSE}
 #| include: FALSE
 #| eval: TRUE
@@ -670,42 +689,6 @@ MSE_hist
 #glimpse(test_frame)
 ```
 
-For det andet hænger modelvalget sammen det bias/variance tradeoff som forekommer, hvis man øger modelkompleksiteten i jagten på identificere den model som har lavest varians og bias. Varians er ændringen i $\hat{f}$, når den beregnes på nye data, fx. vha valideringsmetoder - dog er værdien aldrig helt den samme! Stiger fleksibiliteten øges variansen. Bias opstår når man forsøger, at forudsige et komplekst fænomen med en for simpel metode. Stiger fleksibiliteten reduceres bias. Efterspørgslen på koldskål er som førnævnt et multidimensionelt fænomen. Vi forsøgte at reducere denne bias ved og udvide den simple lineære model med Temp_mean_past1h uden alle de kategoriske faktorvariabler, da de ikke kan indgå i en polynomisk regression. Det resulterede ikke i en forbedring i RMSE, eller en stigning i $R^2$. Hverken da den blev opløftet i 3 og 22 potens. Valget blev derfor, at beholde faktorerne i den moderate model, fordi de til sammen forklarer $63\%$ af den samlede varians. Andre variable kunne havde indflydelse på butikkernes efterspørgsel på koldskål. Gennemsnitlige antal solskinstimer, maksimale vindhastighed, samt de private forbrugers socioøkonomiske forhold kunne bidrage med flere dimensioner til den moderate model. Beslutningen blev derfor, at vælge den multible lineære model med moderat kompleksitet. I næste kapitel udrulles anbefalingerne.
-
-```{r, Chunk 15 - Poly plot}
-#| include: FALSE
-#| eval: TRUE
-#| warning: FALSE
-x <- data3$temp_mean_past1h
-y <- data3$efterspørgsel
-data <- data.frame(y, x)
-
-ggplot(data3, mapping = aes(x=x, y=y)) + 
-  geom_point(alpha=1/3) +
-  geom_smooth(method="glm", formula = y ~ poly(x, 1,
-                                               raw=TRUE), 
-                                               se=FALSE, 
-                                               colour="blue") +
-  geom_smooth(method="glm", formula = y ~ poly(x, 3, 
-                                               raw=TRUE), 
-                                               se=FALSE, 
-                                               colour="green") +
-  geom_smooth(method="glm", formula = y ~ poly(x, 22, 
-                                               raw=TRUE), 
-                                               se=FALSE, 
-                                               colour="red") +
-  geom_point(data=data3, mapping = aes(x=x, y=y), alpha=1/3) + 
-  labs(title = "Hældning ved de tre polynomiske regressionsmodeller",
-  caption = "Kilde: Tal fra DMI 2002 fra perioden 1/4/22-30/8/22",
-y = "Butikkernes efterspørgsel på koldskål i Ltr.",
-x = "Gennemsnitlige temperatur pr.time i °C.") +
-  ggeasy::easy_center_title() + # Centrerer titlen. 
-  theme( plot.title = element_text(hjust = 0.5, size = 14), 
-  plot.subtitle = element_text(hjust = 0.5, size = 14), 
-  plot.caption = element_text(hjust = 1, face = "italic", size = 10 )) +
-  xlim(5, 31) + ylim(220, 900)
-
-```
 
 # Anbefalinger
 
@@ -742,3 +725,4 @@ Kjer, U. (sep. 2022). „*Sommervejret var 3 pct. bedre end sidste år"*. I: Mej
 Osterwalder, A. & Pigneur, Y. (2010). *„Business Model Generation "*. 1. udgave. John Wiley & Sons. 
 
 Picopublish (feb. 2022). *„Datamodenhed handler om at blive bedre til at anvende egne data i værdiskabende sammenhænge"*. I: Picopublish. 
+

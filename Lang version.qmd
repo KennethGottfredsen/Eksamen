@@ -125,13 +125,13 @@ Som supplement til de kvantitative data kombineres der med nogle kvalitative dat
 
 Den metodologiske fremgangsmåde betyder, at vi i større grad har arbejdet induktivt - dvs. hvor vi gik fra det konkrete til det generelle (ibid). Vi startede fx først ud med at lave en interviewguide og nogle spørgsmålsformuleringer, som vi operationaliserede ud fra vores hovedspørgsmål og vores underspørgsmål (se interviewguiden under bilag). Spørgsmålene blev stillet til vores informanter i to semistrukturerede interviews under vores besøg hos Thise Mejeri. Der har også været perioder, hvor vi har arbejdet deduktivt - dvs. hvor vi fik fra det generelle til det konkrete. Fx fandt vi på forhånd ud af nogle teorier om, hvorfor COOPs efterspørgsel på koldskål faldt eller steg. Det viste sig, at fx. at vejret og konkurrenternes pris på koldskål påvirkede efterspørgslen.
 
-Den statistiske metode som anvendes i denne undersøgelse, kaldes for superviseret metode, fordi den tager udgangspunkt i en afhængig variabel. Den konkrete metode er en multibel lineær regression. Den vil vi anvende til og forudsige efterspørgslen på koldskål i liter fremadrettet ud fra effekten af nogle uafhængige vejr-variabler. Efter vi først har trænet vores model på træningsdata og fået beregnet de nødvendige koefficienter, får alle variablerne i ligningen smidt en hat på toppen - dette indikerer prædiktion (Hastie et.al 2021). Den generelle formel er:
+Den statistiske metode som anvendes i denne undersøgelse kaldes for superviseret metode, fordi den tager udgangspunkt i en afhængig variabel. Den specifikke metode er en *multibel lineær regression*. Den bruges til at forudsige efterspørgslen på koldskål i liter ud fra effekten af flere uafhængige vejr-variabler. Dette betegnes som prædiktion (Hastie et.al 2021). Den generelle formel er:
 
 $$
  \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2... + \hat{\beta_p}x_p + \epsilon
 $$
 
-$\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$. $\hat{Y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Men det vil aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl vil altid være til stede (Hastie et.al 2021).
+$\hat{y}$ er den forudsagte værdi af $Y$ og $\hat{f}$ er et estimat for $f$. $\hat{Y}$ er desuden den afhængige variabel efterspørgsel i liter. $x_i$ er udvalgte uafhængige variabler. $\hat{y} = f(X)$ indeholder variation som vi kan reducere ved, at bruge den korrekte SL-metode til, at beregne $f$ med. Men det vil aldrig være en fejlfri model vi ender ud med. Fordi estimatet $\epsilon$ er tilfældige fejl eller støj, man ikke kan gøre noget ved og den type fejl (Hastie et.al 2021).
 
 # Kvalitativ analyse
 
@@ -516,8 +516,6 @@ xlim(4.6, 30.8) + ylim(150, 850)
 
 I første omgang trænes modellen på træningsdata, fordi vi gerne vil tilpasse modelparametrene. Vi bruger træningsdata til, at fintune vores regressionsmodel. Når modellen er blevet trænet godt igennem, bliver den afprøvet på testdata, da vi gerne vil undersøge hvor god modellen er til, at forudsige en så præcis efterspørgsel på koldskål som mulig. Vurderingen af modelpræcisionen bestemmes ud fra den laveste MSE værdi. MSE måler hvor langt den forudsagte værdi for en observation er fra den faktiske værdi for en observation.
 
-Er MSE lille er der den forudsagte værdi tæt på den faktiske værdi, er MSE stor er den forudsagte værdi langt fra den faktiske værdi. MSE er således et udtryk for, hvor præcis den udvalgte model er til, at forudsige efterspørgslen af koldskål (Hastie et.al 2021).
-
 Da antallet af variabler i det samlede datasæt er mindre end antallet af observationer bruges backward-selection til, at udvælge de uafhængige variabler som fremadrettet skal indgå i modellerne. Det vil sige, at vi tilføjer alle variable ind på højre side af ligningen, og fjerner dem med den højeste p-værdi indtil der kun er signifikante uafhængige variable tilbage (Hastie et.al 2021).
 
 Denne teknik kan hjælpe med at reducere unødvendig varians i den udvalgte model, men på samme tid være effektiv nok til at identificere vigtige relationer i datasættet (ibid).
@@ -582,73 +580,65 @@ Problemet med metoden er, at det kræver stor computerkraft. Det tog denne bærb
 
 Med udgangspunkt i tabel 1 tolkes der på modelparametrene.
 
-## Baseline model
-
-## Simpel model
-
-## Mellem model
-
-## Kompleks model
-
-#### Vurdering af outliers
-
-+-------------------------+----------------+----------------+----------------+-----------------+
-|                         | Baseline       | Simpel         | Mellem         | Kompleks        |
-+:========================+:==============:+:==============:+:==============:+:===============:+
-| Forvent_lager(mellem)   |                |                | $-76.57$\*\*\* | $-74.55$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$19.82$}      | {$19.72$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Forvent_lager(høj)      |                |                | $-82.67$\*\*\* | $-87.00$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$22.58$}      | {$22.81$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Weekend_helligdag(ja)   |                |                | $113.01$\*\*\* | $107.33$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$15.00$}      | {$15.16$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Kamjunk(nej)            |                |                | $-71.89$\*\*\* | $-76.52$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$17.50$}      | {$19.82$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Temp_gt25_3\_dage       |                |                | $-82.00$\*     | $-66.74$\*      |
-|                         |                |                |                |                 |
-|                         |                |                | {$34.23$}      | {$34.90$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Måned(maj)              |                |                | $84.37$\*\*\*  | $101.69$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$24.54$}      | {$23.36$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Måned(juni)             |                |                | $129.51$\*\*\* | $162.71$\*\*\*  |
-|                         |                |                |                |                 |
-|                         |                |                | {$32.79$}      | {$27.87$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Måned(juli)             |                |                | $155.95$\*\*\* | $155.947$\*\*\* |
-|                         |                |                |                |                 |
-|                         |                |                | {$32.79$}      | {$29.12$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Måned(august)           |                |                | $85.10$\*      | $197.44$\*      |
-|                         |                |                |                |                 |
-|                         |                |                | {$34.76$}      | {$30.96$}       |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Temp_mean_past1h        |                | $9.46$\*\*\*   | $4.249$\*      | $0.0$           |
-|                         |                |                |                |                 |
-|                         |                | {$1.89$}       | {$2.07$}       |                 |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Uafhængige variable     | $0$            | $1$            | $6$            | $6$             |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Skæring $\hat{\beta_0}$ | $520.23$\*\*\* | $346.04$\*\*\* | $379.93$\*\*\* | $434.78$\*\*\*  |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Model P-værdi           | $***$          | $***$          | $***$          | $***$           |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| MSE_træning             | $139.20$       | $128.74$       | $82.10$        | $83.21$         |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| MSE_test                | $139.20$       | $130.36$       | $88.55$        | $89.37$         |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| $R^2$                   |                | $0.15$         | $0.65$         | $0.64$          |
-+-------------------------+----------------+----------------+----------------+-----------------+
-| Obs.                    | $150$          | $150$          | $150$          | $150$           |
-+-------------------------+----------------+----------------+----------------+-----------------+
++----------------------------+---------------+---------------+---------------+----------------+
+|                            | **Baseline**  | **Simpel**    | **Moderat**   | **Kompleks**   |
++:===========================+:=============:+:=============:+:=============:+:==============:+
+| **Forvent_lager (mellem)** |               |               | $-76.57$$***$ | $-74.55$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$19.82$}     | {$19.72$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Forvent_lager (høj)**    |               |               | $-82.67$$***$ | $-87.00$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$22.58$}     | {$22.81$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Weekend_helligdag (ja)** |               |               | $113.01$$***$ | $107.33$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$15.00$}     | {$15.16$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Kamjunk (nej)**          |               |               | $-71.89$$***$ | $-76.52$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$17.50$}     | {$19.82$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Temp_gt25_3\_dage**      |               |               | $-82.00$$*$   | $-66.74$$*$    |
+|                            |               |               |               |                |
+|                            |               |               | {$34.23$}     | {$34.90$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Måned (maj)**            |               |               | $84.37$$***$  | $101.69$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$24.54$}     | {$23.36$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Måned (juni)**           |               |               | $129.51$$***$ | $162.71$$***$  |
+|                            |               |               |               |                |
+|                            |               |               | {$32.79$}     | {$27.87$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Måned (juli)**           |               |               | $155.95$$***$ | $155.947$$***$ |
+|                            |               |               |               |                |
+|                            |               |               | {$32.79$}     | {$29.12$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Måned (august)**         |               |               | $85.10$$*$    | $197.44$$*$    |
+|                            |               |               |               |                |
+|                            |               |               | {$34.76$}     | {$30.96$}      |
++----------------------------+---------------+---------------+---------------+----------------+
+| **Temp_mean_past1h**       |               | $9.46$$***$   | $4.249$$*$    | $0$            |
+|                            |               |               |               |                |
+|                            |               | {$1.89$}      | {$2.07$}      |                |
++----------------------------+---------------+---------------+---------------+----------------+
+| Uafhængige variable        | $0$           | $1$           | $6$           | $6$            |
++----------------------------+---------------+---------------+---------------+----------------+
+| Skæring $\hat{\beta_0}$    | $520.23$$***$ | $346.04$$***$ | $379.93$$***$ | $434.78$$***$  |
++----------------------------+---------------+---------------+---------------+----------------+
+| Model P-værdi              | $***$         | $***$         | $***$         | $***$          |
++----------------------------+---------------+---------------+---------------+----------------+
+| RMSE_træning               | $139.20$      | $128.74$      | $82.10$       | $83.21$        |
++----------------------------+---------------+---------------+---------------+----------------+
+| RMSE_test                  | $139.20$      | $130.36$      | $88.55$       | $89.37$        |
++----------------------------+---------------+---------------+---------------+----------------+
+| $R^2$                      |               | $0.15\%$      | $0.65\%$      | $0.64\%$       |
++----------------------------+---------------+---------------+---------------+----------------+
+| Justeret $R^2$             |               | $0.14\%$      | $0.63\%$      | $0.62\%$       |
++----------------------------+---------------+---------------+---------------+----------------+
+| Observationer              | $151$         | $151$         | $151$         | $151$          |
++----------------------------+---------------+---------------+---------------+----------------+
 
 Tabel 1. Summeret modelreferat fra testdata. Referencegrupper () for faktorerne er: kamjunkja, forvent_lagerlav, månedapril. {} referer til standardfejlen. Note:$* = P < 0.1; ** = P < 0.05; *** = P <0.01$
 
