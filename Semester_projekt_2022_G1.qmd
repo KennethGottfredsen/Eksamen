@@ -49,7 +49,7 @@ options(scipen = 100) # Justerer antallet af decimaler.
 
 # Problemfelt
 
-Det er vanskeligt at forudsige hvor meget koldskål Thise Mejeri skal producere til deres kunder (Kjer 2022). Sommervejret påvirker kundernes efterspørgsel på koldskål (Holland 2022). Hos Thise Mejeri bruger medarbejderne vejrudsigten, og mange års erfaring når de skal vurdere, hvor mange ltr. koldskål, der skal produceres (Jensen 2022). I en artikel fra TV Midtvest fortæller adm. direktør Poul Pedersen fra Thise Mejeri at: *"Vi kigger på tal og vejrudsigter som aldrig før. Så beslutter vi os for et tal, og vi plejer at være gode til at gætte." - (ibid).* Det er et erhvervsøkonomisk problem, hvis man udelukkende bruger vejrudsigten og gætteri til, at forudsige hvor meget koldskål produktionsafdelingen skal producere. I år har den manglende mulighed for at forcaste resulterede i, at de i uge 36 ikke har kunne leve op til deres forpligtelse over for COOP i uge 36, og de har derfor fået en dårligere leveringsscore, som er et vigtigt KPI hos Thise Mejeri (Jensen 30:35). Gætteriet medfører en vis risiko, da man ikke kan garantere, at alt koldskålen bliver solgt - selv når vejret er godt! (ibid). Konsekvensen kan føre til et stort økonomisk tab, fordi den mængde koldskål, som ikke bliver solgt i butikkerne, leveres tilbage til Thises eget lager igen. Afhænger COOPs efterspørgsel på koldskål kun af vejret? Er der andre mekanismer end vejret, som forårsager en stigende eller faldende efterspørgsel på koldskål? Formålet med undersøgelsen er, at undersøge hvordan Thises datamodenhedsproces hænger sammen med COOPs efterspørgsel på koldskål.
+Det er vanskeligt at forudsige hvor meget koldskål Thise Mejeri skal producere til deres kunder (Kjer 2022). Sommervejret påvirker kundernes efterspørgsel på koldskål (Holland 2022). Hos Thise Mejeri bruger medarbejderne vejrudsigten, og mange års erfaring når de skal vurdere, hvor mange ltr. koldskål, der skal produceres (Jensen 2022). I en artikel fra TV Midtvest fortæller adm. direktør Poul Pedersen fra Thise Mejeri at: *"Vi kigger på tal og vejrudsigter som aldrig før. Så beslutter vi os for et tal, og vi plejer at være gode til at gætte." - (ibid).* Det er et erhvervsøkonomisk problem, hvis man udelukkende bruger vejrudsigten og gætteri til, at forudsige hvor meget koldskål produktionsafdelingen skal producere. I år har den manglende mulighed for at forecaste resulterede i, at de i uge 36 ikke har kunne leve op til deres forpligtelse over for COOP i uge 36, og de har derfor fået en dårligere leveringsscore, som er et vigtigt KPI hos Thise Mejeri (Jensen 30:35). Gætteriet medfører en vis risiko, da man ikke kan garantere, at alt koldskålen bliver solgt - selv når vejret er godt! (ibid). Konsekvensen kan føre til et stort økonomisk tab, fordi den mængde koldskål, som ikke bliver solgt i butikkerne, leveres tilbage til Thises eget lager igen. Afhænger COOPs efterspørgsel på koldskål kun af vejret? Er der andre mekanismer end vejret, som forårsager en stigende eller faldende efterspørgsel på koldskål? Formålet med undersøgelsen er, at undersøge hvordan Thises datamodenhedsproces hænger sammen med COOPs efterspørgsel på koldskål.
 
 # Problemformulering
 
@@ -727,18 +727,6 @@ sessionInfo(package = NULL) # Printer en liste om R sessionen.
 
 Bilag 1 - Interviewguide.
 
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.17.40.png)
-
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.19.03.png)
-
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.19.47.png)
-
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.20.28.png)
-
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.21.00.png)
-
-![](images/Sk%C3%A6rmbillede%202022-12-29%20kl.%2021.21.31.png)
-
 Bilag 2 
 
 Interview af Søren Jensen fra produktionsafdelingen i Thise Mejeri  \
@@ -828,10 +816,6 @@ Bilag 3 
     Svar: 
 
     Ja, de er en aktiv medspiller. Nogle gange har Coop en idé om et produkt de gerne vil have, det kan feks være et eksisterende produkt som de ønsker i en økologisk udgave, så kan de kontakte os for at høre om det er noget vi kan producere. De er en stærk medspiller, og de fleste produkter bliver født her i Thiese, og så banker vi på ved Coop for at høre om de er interesserede i at sælge dem -- hvilket de oftest gerne vil. I mange år har vi haft et meget tæt samarbejde med Irma, som vi har brugt en del til at teste markedet af, fordi Irma butikkerne lever af at have et nyt og spændende sortiment -- med stor udskiftning -- så når vi har et nyt produkt, så ringer vi mere eller mindre over til Coop og siger, at vi sender det med i lastbilerne og om de ikke vil sætte det på hylderne i Irma. Hvis det sælger der, så udvider vi til Superbrugsen og Kvickly på Sjælland, og hvis det så også sælger der, så fortsætter det. De er mere åbne for nye produkter på Sjælland. Det har været fremgangsmetoden i 30 år, men processen er mere strømlinet pga datakrav etc. 
-
-     
-
-     
 
     **SP7:** 
 
@@ -1106,32 +1090,4 @@ Bilag 3 
 
     -   Test 
 
-    -   Storytelling /business model 
-
-# Figurer
-
-Figur 1 - Busines model Canvas.
-
-![](images/image-1487588843.png)
-
-Figur 2 - Alexandremodellen
-
-![](images/Sk%C3%A6rmbillede%202022-12-30%20kl.%2010.40.26.png)
-
-Figur 3 - Data Product Canvas
-
-![](images/Sk%C3%A6rmbillede%202022-12-30%20kl.%2010.44.38.png)
-
-Hypoteser fra DPC.
-
-![](images/image-198045253.png)
-
-![](images/image-481320815.png)
-
-![](images/image-1052926965.png)
-
-![](images/image-878613547.png)
-
-![](images/image-735341634.png)
-
-![](images/Sk%C3%A6rmbillede%202023-01-03%20kl.%2014.50.56.png)
+    -   Storytelling /business model.
